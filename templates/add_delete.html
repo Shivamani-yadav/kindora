@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add Matrimony Profile - KINDORA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+:root{
+  --primary:#1E88E5;
+  --primary-dark:#1565C0;
+  --primary-soft:rgba(30,136,229,0.12);
+  --secondary:#43A047;
+  --secondary-dark:#2E7D32;
+  --danger:#E53935;
+  --danger-dark:#C62828;
+  --text:#1c2430;
+  --muted:#5f6f82;
+  --line:#e8eef5;
+  --card:rgba(255,255,255,0.88);
+  --white:#ffffff;
+  --shadow-lg:0 24px 70px rgba(10,35,66,0.16);
+  --shadow-md:0 12px 28px rgba(16,24,40,0.10);
+  --shadow-sm:0 6px 18px rgba(16,24,40,0.08);
+  --radius-xl:24px;
+  --radius-lg:18px;
+  --radius-md:14px;
+  --radius-sm:10px;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'Poppins',Arial,sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  padding:24px;
+  background:
+    radial-gradient(circle at 0% 15%, rgba(30,136,229,0.20), transparent 32%),
+    radial-gradient(circle at 100% 0%, rgba(67,160,71,0.14), transparent 28%),
+    radial-gradient(circle at 50% 100%, rgba(30,136,229,0.10), transparent 30%),
+    linear-gradient(135deg, #edf5ff 0%, #f8fff9 100%);
+  background-attachment:fixed;
+  position:relative;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+  z-index:0;
+}
+
+.top-bar{
+  width:90%;
+  max-width:1120px;
+  margin:0 auto 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:relative;
+  z-index:1;
+}
+
+.home-btn{
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:linear-gradient(135deg, var(--primary), #42A5F5);
+  color:#fff;
+  padding:12px 20px;
+  border-radius:14px;
+  font-weight:800;
+  font-size:14px;
+  letter-spacing:0.2px;
+  box-shadow:var(--shadow-md);
+  transition:all .28s ease;
+  border:1px solid rgba(255,255,255,0.20);
+}
+
+.home-btn:hover{
+  background:linear-gradient(135deg, var(--primary-dark), #1E88E5);
+  transform:translateY(-2px);
+  box-shadow:0 16px 30px rgba(21,101,192,0.24);
+}
+
+.form-wrap{
+  width:90%;
+  max-width:1120px;
+  margin:0 auto;
+  background:var(--card);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-radius:var(--radius-xl);
+  padding:34px;
+  box-shadow:var(--shadow-lg);
+  border:1px solid rgba(255,255,255,0.65);
+  position:relative;
+  z-index:1;
+  overflow:hidden;
+}
+
+.form-wrap::before{
+  content:"";
+  position:absolute;
+  top:-120px;
+  right:-80px;
+  width:260px;
+  height:260px;
+  background:radial-gradient(circle, rgba(30,136,229,0.18), transparent 65%);
+  border-radius:50%;
+  pointer-events:none;
+}
+
+.form-wrap::after{
+  content:"";
+  position:absolute;
+  bottom:-140px;
+  left:-80px;
+  width:280px;
+  height:280px;
+  background:radial-gradient(circle, rgba(67,160,71,0.12), transparent 65%);
+  border-radius:50%;
+  pointer-events:none;
+}
+
+h2{
+  text-align:center;
+  color:var(--primary);
+  font-size:31px;
+  font-weight:900;
+  margin-bottom:8px;
+  letter-spacing:0.2px;
+  position:relative;
+  z-index:1;
+}
+
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:30px;
+  line-height:1.7;
+  position:relative;
+  z-index:1;
+}
+
+.section-box{
+  margin-top:38px;
+  padding-top:28px;
+  border-top:1px solid var(--line);
+  position:relative;
+  z-index:1;
+}
+
+.section-box h2{
+  margin-bottom:6px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px 24px;
+  position:relative;
+  z-index:1;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+
+.form-group.full{
+  grid-column:1 / -1;
+}
+
+label{
+  display:block;
+  font-weight:800;
+  margin-bottom:9px;
+  color:#243447;
+  font-size:14px;
+  letter-spacing:0.15px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:14px 15px;
+  border:1px solid #d8e3ee;
+  border-radius:14px;
+  font-size:14px;
+  font-family:'Poppins',Arial,sans-serif;
+  outline:none;
+  transition:all .25s ease;
+  background:rgba(255,255,255,0.96);
+  color:var(--text);
+  box-shadow:inset 0 1px 2px rgba(16,24,40,0.03);
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:#8b98a9;
+}
+
+input:hover,
+select:hover,
+textarea:hover{
+  border-color:#bfd4ea;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px var(--primary-soft);
+  background:#fff;
+}
+
+textarea{
+  resize:vertical;
+  min-height:120px;
+  line-height:1.7;
+}
+
+input[type="file"]{
+  padding:12px;
+  cursor:pointer;
+}
+
+input[type="file"]::file-selector-button{
+  border:none;
+  background:linear-gradient(135deg, var(--primary), #42A5F5);
+  color:#fff;
+  padding:10px 16px;
+  border-radius:10px;
+  font-weight:700;
+  font-family:'Poppins',Arial,sans-serif;
+  cursor:pointer;
+  margin-right:12px;
+  transition:all .25s ease;
+}
+
+input[type="file"]::file-selector-button:hover{
+  background:linear-gradient(135deg, var(--primary-dark), var(--primary));
+}
+
+.file-note{
+  margin-top:9px;
+  font-size:12px;
+  color:#6d7d90;
+  line-height:1.6;
+  padding-left:2px;
+}
+
+.form-actions{
+  margin-top:28px;
+  position:relative;
+  z-index:1;
+}
+
+.submit-btn{
+  width:100%;
+  border:none;
+  background:linear-gradient(135deg, var(--secondary), #66BB6A);
+  color:#fff;
+  padding:16px;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 12px 26px rgba(67,160,71,0.24);
+  transition:all .28s ease;
+  letter-spacing:0.3px;
+  font-family:'Poppins',Arial,sans-serif;
+}
+
+.submit-btn:hover{
+  background:linear-gradient(135deg, var(--secondary-dark), var(--secondary));
+  transform:translateY(-2px);
+  box-shadow:0 16px 30px rgba(46,125,50,0.28);
+}
+
+.submit-btn:active{
+  transform:translateY(0);
+}
+
+.table-wrap{
+  width:100%;
+  overflow-x:auto;
+  margin-top:22px;
+  border-radius:18px;
+  box-shadow:var(--shadow-sm);
+  border:1px solid #e6edf6;
+  background:#fff;
+}
+
+.table-wrap::-webkit-scrollbar{
+  height:10px;
+}
+
+.table-wrap::-webkit-scrollbar-track{
+  background:#eef4fb;
+  border-radius:10px;
+}
+
+.table-wrap::-webkit-scrollbar-thumb{
+  background:#b8cde2;
+  border-radius:10px;
+}
+
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  background:#fff;
+  min-width:820px;
+}
+
+thead tr{
+  background:linear-gradient(135deg, var(--primary), #42A5F5);
+  color:#fff;
+}
+
+thead th{
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+
+th,
+td{
+  padding:14px 12px;
+  text-align:center;
+  border-bottom:1px solid #ebf0f6;
+  font-size:14px;
+  vertical-align:middle;
+}
+
+th{
+  font-weight:800;
+  letter-spacing:0.25px;
+  white-space:nowrap;
+}
+
+th:first-child{
+  border-top-left-radius:16px;
+}
+
+th:last-child{
+  border-top-right-radius:16px;
+}
+
+tbody tr:nth-child(even){
+  background:#f9fbfe;
+}
+
+tbody tr:hover{
+  background:#eef7ff;
+  transition:background .25s ease;
+}
+
+tbody td{
+  color:#2f3c4b;
+}
+
+tbody td:nth-child(2){
+  font-weight:700;
+  color:#19324d;
+}
+
+tbody td:nth-child(6){
+  max-width:220px;
+  word-break:break-word;
+  line-height:1.6;
+}
+
+.profile-img{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid rgba(30,136,229,0.20);
+  box-shadow:0 6px 16px rgba(30,136,229,0.18);
+  background:#fff;
+}
+
+.remove-btn{
+  background:linear-gradient(135deg, var(--danger), #ef5350);
+  color:#fff;
+  border:none;
+  padding:9px 15px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:800;
+  font-family:'Poppins',Arial,sans-serif;
+  transition:all .25s ease;
+  box-shadow:0 8px 18px rgba(229,57,53,0.18);
+}
+
+.remove-btn:hover{
+  background:linear-gradient(135deg, var(--danger-dark), var(--danger));
+  transform:translateY(-1px);
+  box-shadow:0 12px 20px rgba(198,40,40,0.22);
+}
+
+.remove-btn:active{
+  transform:translateY(0);
+}
+
+.empty-msg{
+  text-align:center;
+  margin-top:24px;
+  font-weight:700;
+  color:#66788a;
+  background:linear-gradient(135deg, rgba(30,136,229,0.06), rgba(67,160,71,0.05));
+  border:1px dashed #cfdceb;
+  padding:22px 18px;
+  border-radius:16px;
+  line-height:1.8;
+}
+
+@media (max-width:1024px){
+  .top-bar,
+  .form-wrap{
+    width:95%;
+  }
+
+  .form-wrap{
+    padding:28px 24px;
+  }
+
+  h2{
+    font-size:28px;
+  }
+}
+
+@media (max-width:768px){
+  body{
+    padding:16px;
+  }
+
+  .top-bar,
+  .form-wrap{
+    width:100%;
+  }
+
+  .top-bar{
+    margin-bottom:16px;
+  }
+
+  .form-wrap{
+    padding:22px 16px;
+    border-radius:20px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+
+  h2{
+    font-size:24px;
+  }
+
+  .subtitle{
+    font-size:13px;
+    margin-bottom:22px;
+  }
+
+  th,
+  td{
+    font-size:12px;
+    padding:11px 10px;
+  }
+
+  .profile-img{
+    width:56px;
+    height:56px;
+  }
+
+  .submit-btn{
+    padding:15px;
+    font-size:14px;
+  }
+
+  .home-btn{
+    padding:11px 16px;
+    font-size:13px;
+  }
+}
+
+@media (max-width:480px){
+  body{
+    padding:12px;
+  }
+
+  .form-wrap{
+    padding:18px 14px;
+  }
+
+  h2{
+    font-size:22px;
+  }
+
+  label{
+    font-size:13px;
+  }
+
+  input,
+  select,
+  textarea{
+    font-size:13px;
+    padding:13px 13px;
+  }
+
+  .subtitle{
+    line-height:1.6;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a class="home-btn" href="/matrimony-requests">← Back</a>
+</div>
+
+<div class="form-wrap">
+  <h2>Add Matrimony Profile</h2>
+  <div class="subtitle">Create and manage matrimony profiles in a clean and organized way</div>
+
+  <form method="POST" enctype="multipart/form-data">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Age</label>
+        <input type="number" name="age" min="21" step="1" required oninput="validateAge(this)">
+      </div>
+
+      <div class="form-group">
+        <label>Gender</label>
+        <select name="gender" required>
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Occupation</label>
+        <input type="text" name="occupation" required>
+      </div>
+
+      <div class="form-group full">
+        <label>Address</label>
+        <textarea name="address" required></textarea>
+      </div>
+
+      <div class="form-group full">
+        <label>Profile Image</label>
+        <input type="file" name="image" accept="image/*">
+        <div class="file-note">Upload a clear profile image for better presentation.</div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="submit-btn">Save Profile</button>
+    </div>
+  </form>
+
+  <div class="section-box">
+    <h2>Existing Matrimony Profiles</h2>
+    <div class="subtitle">Added profiles list</div>
+
+    {% if profiles %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th>Occupation</th>
+              <th>Address</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in profiles %}
+            <tr>
+              <td>
+                {% if p[6] %}
+                  <img src="{{ p[6] }}" class="profile-img">
+                {% else %}
+                  No Image
+                {% endif %}
+              </td>
+              <td>{{ p[1] }}</td>
+              <td>{{ p[2] }}</td>
+              <td>{{ p[3] }}</td>
+              <td>{{ p[4] }}</td>
+              <td>{{ p[5] }}</td>
+              <td>
+                <form method="POST" action="/delete-matrimony-profile" onsubmit="return confirm('Delete this profile?')">
+                  <input type="hidden" name="profile_id" value="{{ p[0] }}">
+                  <button type="submit" class="remove-btn">Remove</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="empty-msg">No profiles added yet.</p>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+function validateAge(input) {
+    const age = parseInt(input.value);
+
+    if (age < 21) {
+        input.setCustomValidity("Age must be 21 or above for matrimony registration.");
+    } else {
+        input.setCustomValidity("");
+    }
+}
+</script>
+
+</body>
+</html>

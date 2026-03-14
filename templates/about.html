@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>About - KINDORA</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background:
+                linear-gradient(rgba(7, 18, 28, 0.35), rgba(7, 18, 28, 0.35)),
+                url("/static/fe82051d-2252-4821-9f59-df625e6b6c82.jpg") center/cover no-repeat;
+            background-size: cover;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        .overlay {
+            position: absolute;
+            top:0; left:0;
+            width:100%; height:100%;
+            background: rgba(0,0,0,0.72);
+            z-index: 0;
+            backdrop-filter: blur(3px);
+        }
+        
+
+        .content {
+            position: relative;
+            z-index: 1;
+            background: rgba(10, 18, 28, 0.72);
+            padding: 45px 40px;
+            border-radius: 24px;
+            max-width: 850px;
+            width: 100%;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.9s ease;
+        }
+
+        h1 {
+            margin-bottom: 22px;
+            color: #ADD8E6;
+            font-size: 42px;
+            letter-spacing: 1px;
+            text-shadow: 0 3px 12px rgba(0,0,0,0.35);
+        }
+
+        h2 {
+            margin-top: 34px;
+            margin-bottom: 14px;
+            color: #87CEFA;
+            font-size: 28px;
+            position: relative;
+        }
+
+        h2::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, #87CEFA, #ADD8E6);
+            margin: 10px auto 0;
+            border-radius: 10px;
+        }
+
+        p {
+            line-height: 1.8;
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #f2f6fb;
+        }
+
+        .social-icons {
+            margin-top: 24px;
+        }
+
+        .social-icons a {
+            margin: 0 12px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.22);
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-4px) scale(1.08);
+            background: rgba(255,255,255,0.18);
+            box-shadow: 0 14px 28px rgba(0,0,0,0.3);
+        }
+
+        .social-icons img {
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        a.home-link {
+            display: inline-block;
+            margin-top: 34px;
+            padding: 13px 28px;
+            background: linear-gradient(135deg, #ADD8E6, #87CEFA);
+            color: black;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s ease;
+            box-shadow: 0 10px 22px rgba(135,206,250,0.25);
+        }
+
+        a.home-link:hover {
+            background: linear-gradient(135deg, #87CEFA, #6ec6ff);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(135,206,250,0.32);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 30px 22px;
+                border-radius: 18px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            .social-icons a {
+                width: 54px;
+                height: 54px;
+                margin: 0 8px;
+            }
+
+            .social-icons img {
+                width: 28px;
+                height: 28px;
+            }
+
+            a.home-link {
+                width: 100%;
+                max-width: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+     
+
+    <div class="overlay"></div>
+    <div class="content">
+        <h1>About Kindora</h1>
+        <p>Kindora is a heartfelt initiative dedicated to supporting and empowering orphaned children. Founded by a passionate team – Shivamani Yadav, Akshay Kumar,mounika, Indra, Bhavana, and Raghu Yadav – our mission is to create a safe, nurturing environment where every child can thrive.</p>
+        <p>Through our platform, we connect generous donors with children in need, ensuring transparency and trust in every contribution. At Kindora, we believe that even small acts of kindness can make a big difference, and together, we can give these children hope, education, and a brighter future.</p>
+        <p>Join us in making a lasting impact and spreading compassion, one child at a time.</p>
+        
+        <h2>Terms & Conditions Notice</h2>
+        <p>By using Kindora, you agree to our Terms & Conditions, which cover the use of this website, donation processing, data privacy, and liability limitations. All donations are handled responsibly and transparently, and your personal information is protected. For detailed Terms & Conditions, please visit our T&amp;C page.</p>
+
+        <h2>Follow Us On</h2>
+        <div class="social-icons">
+            <a href="https://www.instagram.com/akshay__rj____?igsh=MTF6OHJjaG95MnI1ag==" target="_blank">
+                <img src="/static/insta.webp" alt="Instagram">
+            </a>
+            <a href="https://www.facebook.com" target="_blank">
+                <img src="/static/facebook.jpg" alt="Facebook">
+            </a>
+            <a href="https://chat.whatsapp.com/HqST7iws6y07TjJUHnTZU1" target="_blank">
+                <img src="/static/whatsapp.jpg" alt="WhatsApp">
+            </a>
+        </div>
+
+        <a href="/dashboard" class="home-link">Back to Home</a>
+    </div>
+</body>
+</html>

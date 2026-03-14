@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donate Furniture / Things - KINDORA</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+        --primary-dark: #102027;
+        --primary: #203a43;
+        --secondary: #2c5364;
+        --accent: #f7a600;
+        --accent-light: #ffd65c;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --border: #dbe4ea;
+        --card-bg: rgba(255, 255, 255, 0.92);
+        --input-bg: #f8fbfd;
+        --shadow: 0 20px 45px rgba(15, 32, 39, 0.14);
+        --hover-shadow: 0 18px 35px rgba(32, 58, 67, 0.16);
+        --radius: 18px;
+    }
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        background:
+            radial-gradient(circle at top left, rgba(255,214,92,0.18), transparent 28%),
+            radial-gradient(circle at bottom right, rgba(44,83,100,0.15), transparent 25%),
+            linear-gradient(135deg, #edf4f7, #f9fbfc 55%, #eef3f6);
+        color: var(--text);
+        line-height: 1.6;
+        min-height: 100vh;
+    }
+
+    button {
+        cursor: pointer;
+        font-family: inherit;
+    }
+
+    header {
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--secondary));
+        color: #fff;
+        padding: 42px 20px 36px;
+        text-align: center;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before,
+    header::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.08);
+    }
+
+    header::before {
+        width: 220px;
+        height: 220px;
+        top: -80px;
+        left: -60px;
+    }
+
+    header::after {
+        width: 180px;
+        height: 180px;
+        right: -50px;
+        bottom: -70px;
+    }
+
+    header h1 {
+        font-size: 36px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .header-subtitle {
+        margin-top: 8px;
+        font-size: 15px;
+        color: rgba(255,255,255,0.86);
+        position: relative;
+        z-index: 1;
+    }
+
+    .container {
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px 40px;
+    }
+
+    .donate-section {
+        background: var(--card-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: 38px 32px;
+        border-radius: 24px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255,255,255,0.7);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .donate-section:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 22px 50px rgba(15, 32, 39, 0.16);
+    }
+
+    .donate-section h2 {
+        color: var(--primary);
+        margin-bottom: 10px;
+        font-size: 30px;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .section-note {
+        text-align: center;
+        color: var(--muted);
+        font-size: 15px;
+        margin-bottom: 28px;
+    }
+
+    .common-entry {
+        border: 1px solid var(--border);
+        padding: 22px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #f8fbfd, #f3f8fb);
+        margin-bottom: 24px;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .common-entry-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 14px;
+    }
+
+    .item-entry {
+        border: 1px solid #e8edf1;
+        padding: 24px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #ffffff, #fcfdfe);
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .item-entry::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background: linear-gradient(to bottom, var(--accent), #ff7f11);
+    }
+
+    .item-entry:hover {
+        box-shadow: var(--hover-shadow);
+        transform: translateY(-2px);
+    }
+
+    .item-entry-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 14px;
+        padding-left: 8px;
+    }
+
+    form input,
+    form select,
+    form textarea {
+        width: 100%;
+        padding: 13px 15px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        border: 1px solid #cfd9df;
+        font-size: 15px;
+        background: var(--input-bg);
+        color: var(--text);
+        transition: all 0.25s ease;
+    }
+
+    form input::placeholder,
+    form textarea::placeholder {
+        color: #8b96a5;
+    }
+
+    form input:focus,
+    form select:focus,
+    form textarea:focus {
+        border-color: var(--secondary);
+        outline: none;
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(44, 83, 100, 0.10);
+    }
+
+    form textarea {
+        min-height: 90px;
+        resize: vertical;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 14px 22px;
+        border-radius: 14px;
+        border: none;
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: 0.2px;
+        transition: all 0.25s ease;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #ffb703, #ffd166);
+        color: #1c1c1c;
+        box-shadow: 0 10px 24px rgba(255, 183, 3, 0.28);
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 28px rgba(255, 183, 3, 0.34);
+    }
+
+    .btn-add {
+        background: linear-gradient(135deg, #1f3c47, #0f172a);
+        color: white;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+
+    .btn-add:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 28px rgba(15, 23, 42, 0.24);
+    }
+
+    .btn-remove {
+        background: linear-gradient(135deg, #ef4444, #b91c1c);
+        color: #fff;
+        margin-top: 6px;
+        box-shadow: 0 8px 18px rgba(185, 28, 28, 0.22);
+    }
+
+    .btn-remove:hover {
+        transform: translateY(-2px);
+    }
+
+    #button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 18px;
+    }
+
+    #confirmationBox {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255,255,255,0.97);
+        color: var(--text);
+        padding: 32px 26px;
+        border-radius: 24px;
+        box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+        text-align: center;
+        z-index: 1000;
+        width: 360px;
+        border: 1px solid rgba(255,255,255,0.7);
+    }
+
+    #confirmationBox h3 {
+        font-size: 25px;
+        color: var(--primary);
+        margin-bottom: 10px;
+    }
+
+    #confirmationBox p {
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    #confirmationBox button {
+        margin-top: 22px;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        border: none;
+        border-radius: 30px;
+        color: white;
+        font-weight: 700;
+        font-size: 15px;
+        box-shadow: 0 10px 22px rgba(0, 114, 255, 0.26);
+        transition: 0.25s ease;
+    }
+
+    #confirmationBox button:hover {
+        transform: translateY(-2px);
+    }
+
+    .overlay-bg {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.45);
+        backdrop-filter: blur(3px);
+        z-index: 999;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            margin: 25px auto;
+            padding: 0 14px 28px;
+        }
+
+        .donate-section {
+            padding: 26px 18px;
+            border-radius: 20px;
+        }
+
+        .donate-section h2 {
+            font-size: 25px;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+        }
+
+        .item-entry,
+        .common-entry {
+            padding: 18px;
+        }
+
+        #confirmationBox {
+            width: calc(100% - 30px);
+            max-width: 360px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Donate Furniture / Things - KINDORA</h1>
+    <p class="header-subtitle">Support children with useful items that can truly make a difference</p>
+</header>
+
+<div class="container">
+    <div class="donate-section">
+        <h2>Make a Difference by Donating Useful Items</h2>
+        <p class="section-note">Fill in the pickup details once, then add one or more items you would like to donate.</p>
+
+        <form method="POST" enctype="multipart/form-data" id="donation-form">
+
+            <!-- Common details for all items -->
+            <div class="common-entry">
+                <div class="common-entry-title">Pickup Details</div>
+                <input type="date" name="pickup_date" id="pickup_date" required>
+                <input type="text" name="pickup_address" placeholder="Pickup Address for All Items" required>
+            </div>
+
+            <div class="item-entry">
+                <div class="item-entry-title">Donation Item 1</div>
+
+                <input type="text" name="item_name[]" placeholder="Item Name" required>
+
+                <select name="item_type[]" required>
+                    <option value="">Select Item Type</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Clothes">Clothes</option>
+                    <option value="Toys">Toys</option>
+                    <option value="Stationery">Stationery</option>
+                    <option value="Utensils">Utensils</option>
+                    <option value="Bedding">Bedding</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <input type="text" name="quantity[]" placeholder="Quantity" required>
+
+                <select name="condition[]" required>
+                    <option value="">Condition</option>
+                    <option value="New">New</option>
+                    <option value="Like New">Like New</option>
+                    <option value="Good">Good</option>
+                    <option value="Used">Used</option>
+                </select>
+
+                <textarea name="message[]" placeholder="Optional Message"></textarea>
+            </div>
+
+            <div id="button-container">
+                <button type="submit" class="btn btn-submit">Submit Donation</button>
+                <button type="button" class="btn btn-add" id="add-item-btn">Add Another Item</button>
+                <button type="button" class="btn btn-add" onclick="goToContribute()">Go to Contribute Page</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div class="overlay-bg" id="overlayBg"></div>
+
+<div id="confirmationBox">
+    <h3>Donation Confirmed 🎉</h3>
+    <p id="confirmationMessage">Your furniture / things donation has been successfully submitted! A confirmation email has been sent.</p>
+    <button onclick="closeDialog()">OK</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+function closeDialog() {
+    document.getElementById("confirmationBox").style.display = "none";
+    document.getElementById("overlayBg").style.display = "none";
+    document.getElementById("donation-form").submit();  // submit after confirmation
+}
+
+function setMinDate() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById("pickup_date").min = today;
+}
+setMinDate();
+
+const addItemBtn = document.getElementById('add-item-btn');
+const form = document.getElementById('donation-form');
+const buttonContainer = document.getElementById('button-container');
+
+function updateItemTitles() {
+    const items = document.querySelectorAll('.item-entry');
+    items.forEach((item, index) => {
+        let title = item.querySelector('.item-entry-title');
+        if (!title) {
+            title = document.createElement('div');
+            title.className = 'item-entry-title';
+            item.insertBefore(title, item.firstChild);
+        }
+        title.textContent = `Donation Item ${index + 1}`;
+    });
+}
+
+addItemBtn.addEventListener('click', () => {
+    const itemEntry = document.createElement('div');
+    itemEntry.className = 'item-entry';
+    itemEntry.innerHTML = `
+        <div class="item-entry-title">Donation Item</div>
+
+        <input type="text" name="item_name[]" placeholder="Item Name" required>
+
+        <select name="item_type[]" required>
+            <option value="">Select Item Type</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Clothes">Clothes</option>
+            <option value="Toys">Toys</option>
+            <option value="Stationery">Stationery</option>
+            <option value="Utensils">Utensils</option>
+            <option value="Bedding">Bedding</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <input type="text" name="quantity[]" placeholder="Quantity" required>
+
+        <select name="condition[]" required>
+            <option value="">Condition</option>
+            <option value="New">New</option>
+            <option value="Like New">Like New</option>
+            <option value="Good">Good</option>
+            <option value="Used">Used</option>
+        </select>
+
+        <textarea name="message[]" placeholder="Optional Message"></textarea>
+
+        <button type="button" class="btn btn-remove">Remove Item</button>
+    `;
+    form.insertBefore(itemEntry, buttonContainer);
+
+    const removeBtn = itemEntry.querySelector('.btn-remove');
+    removeBtn.addEventListener('click', () => {
+        itemEntry.remove();
+        updateItemTitles();
+    });
+
+    updateItemTitles();
+});
+
+form.addEventListener("submit", function(e) {
+    e.preventDefault();   // stop immediate form submission
+
+    document.getElementById("confirmationBox").style.display = "block";
+    document.getElementById("overlayBg").style.display = "block";
+
+    confetti({
+        particleCount: 200,
+        spread: 70,
+        origin: { y: 0.6 }
+    });
+});
+
+function goToContribute() {
+    window.location.href = "/contribute";
+}
+
+updateItemTitles();
+</script>
+
+</body>
+</html>

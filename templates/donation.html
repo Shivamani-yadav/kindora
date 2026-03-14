@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donate Books - KINDORA</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    * { 
+        box-sizing: border-box; 
+        margin: 0; 
+        padding: 0; 
+    }
+
+    body {
+        font-family: 'Poppins', 'Roboto', sans-serif;
+        background:
+            linear-gradient(135deg, rgba(238,242,243,0.92), rgba(223,233,243,0.88)),
+            url("/static/child1.jpg") center/cover no-repeat;
+        color: #333;
+        line-height: 1.6;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(circle at top left, rgba(255,255,255,0.55), transparent 28%),
+            radial-gradient(circle at bottom right, rgba(173,216,230,0.22), transparent 30%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    a { text-decoration: none; }
+    button { 
+        cursor: pointer; 
+        font-family: inherit;
+    }
+
+    header {
+        position: relative;
+        z-index: 1;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: #fff;
+        padding: 34px 20px;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+        overflow: hidden;
+    }
+
+    header::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, rgba(255,255,255,0.08), transparent 45%);
+        pointer-events: none;
+    }
+
+    header h1 {
+        position: relative;
+        font-size: 36px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    }
+
+    .container {
+        position: relative;
+        z-index: 1;
+        max-width: 920px;
+        margin: 50px auto;
+        padding: 0 20px 30px;
+    }
+
+    .donate-section {
+        background: rgba(255,255,255,0.72);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        padding: 45px 40px;
+        border-radius: 24px;
+        box-shadow:
+            0 18px 45px rgba(0,0,0,0.12),
+            inset 0 1px 0 rgba(255,255,255,0.55);
+        transition: all 0.35s ease;
+        border: 1px solid rgba(255,255,255,0.55);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .donate-section::before {
+        content: "";
+        position: absolute;
+        top: -60%;
+        left: -60%;
+        width: 180%;
+        height: 180%;
+        background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0));
+        transform: rotate(18deg);
+        pointer-events: none;
+    }
+
+    .donate-section:hover {
+        transform: translateY(-4px);
+        box-shadow:
+            0 24px 55px rgba(0,0,0,0.15),
+            inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+
+    .donate-section h2 {
+        color: #1d3340;
+        margin-bottom: 30px;
+        font-size: 30px;
+        text-align: center;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+    }
+
+    form input, form select, form textarea {
+        width: 100%;
+        padding: 14px 16px;
+        margin-bottom: 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(32,58,67,0.10);
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background: rgba(255,255,255,0.92);
+        font-family: inherit;
+        color: #222;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    form input::placeholder,
+    form textarea::placeholder {
+        color: #6c7278;
+    }
+
+    form input:focus,
+    form select:focus,
+    form textarea:focus {
+        border-color: #2c5364;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(44,83,100,0.12);
+        background: #fff;
+        transform: translateY(-1px);
+    }
+
+    form textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 14px 25px;
+        border-radius: 30px;
+        border: none;
+        font-weight: 600;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        letter-spacing: 0.3px;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #f7971e, #ffd200);
+        color: #111;
+        width: 100%;
+        box-shadow: 0 10px 24px rgba(247,151,30,0.22);
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px) scale(1.01);
+        box-shadow: 0 14px 28px rgba(247,151,30,0.28);
+    }
+
+    .btn-add {
+        background: linear-gradient(135deg, #203a43, #2c5364);
+        color: #fff;
+        width: 100%;
+        box-shadow: 0 10px 22px rgba(32,58,67,0.20);
+    }
+
+    .btn-add:hover {
+        transform: translateY(-2px) scale(1.01);
+        box-shadow: 0 14px 28px rgba(32,58,67,0.28);
+    }
+
+    .btn-remove {
+        background: linear-gradient(135deg, #e52d27, #b31217);
+        color: #fff;
+        margin-top: 10px;
+        width: 100%;
+        box-shadow: 0 10px 22px rgba(181,18,23,0.18);
+    }
+
+    .btn-remove:hover {
+        transform: translateY(-2px) scale(1.01);
+        box-shadow: 0 14px 28px rgba(181,18,23,0.24);
+    }
+
+    .book-entry {
+        border: 1px solid rgba(32,58,67,0.08);
+        padding: 25px;
+        border-radius: 18px;
+        background: rgba(255,255,255,0.62);
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.04);
+        backdrop-filter: blur(8px);
+    }
+
+    .book-entry:hover {
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
+    }
+
+    #button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-top: 18px;
+    }
+
+    #confirmationBox {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background: rgba(255,255,255,0.96);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        color: black;
+        padding: 35px 30px;
+        border-radius: 26px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.28);
+        text-align: center;
+        z-index: 1000;
+        width: 360px;
+        max-width: calc(100% - 30px);
+        border: 1px solid rgba(255,255,255,0.75);
+        animation: popUp 0.35s ease;
+    }
+
+    #confirmationBox h3 {
+        font-size: 24px;
+        color: #1f4251;
+        margin-bottom: 14px;
+        font-weight: 700;
+    }
+
+    #confirmationBox p {
+        font-size: 14px;
+        color: #333;
+        line-height: 1.7;
+    }
+
+    #confirmationBox button {
+        margin-top: 25px;
+        padding: 12px 25px;
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        border: none;
+        border-radius: 30px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s ease;
+        box-shadow: 0 10px 24px rgba(0,114,255,0.22);
+    }
+
+    #confirmationBox button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 28px rgba(0,114,255,0.28);
+    }
+
+    @keyframes popUp {
+        from {
+            opacity: 0;
+            transform: translate(-50%,-50%) scale(0.94);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%,-50%) scale(1);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            margin: 30px auto;
+            padding: 0 14px 20px;
+        }
+
+        .donate-section {
+            padding: 28px 20px;
+            border-radius: 20px;
+        }
+
+        header {
+            padding: 26px 16px;
+        }
+
+        header h1 {
+            font-size: 27px;
+        }
+
+        .donate-section h2 {
+            font-size: 24px;
+            margin-bottom: 22px;
+        }
+
+        form input, form select, form textarea {
+            font-size: 14px;
+            padding: 13px 14px;
+        }
+
+        .book-entry {
+            padding: 18px;
+            border-radius: 16px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Donate Books - KINDORA</h1>
+</header>
+
+<div class="container">
+    <div class="donate-section">
+        <h2>Make a Difference by Donating Books</h2>
+
+        <form method="POST" enctype="multipart/form-data" id="donation-form">
+
+            <div class="book-entry">
+                <input type="text" name="title[]" placeholder="Book Title" required>
+                <input type="text" name="author[]" placeholder="Author Name" required>
+                <select name="genre[]" required>
+                    <option value="">Select Genre</option>
+                    <option value="Fiction">Fiction</option>
+                    <option value="Non-Fiction">Non-Fiction</option>
+                    <option value="Education">Education</option>
+                    <option value="Storybook">Storybook</option>
+                </select>
+                <select name="condition[]" required>
+                    <option value="">Condition</option>
+                    <option value="New">New</option>
+                    <option value="Used">Used</option>
+                </select>
+                <input type="number" name="quantity[]" placeholder="Quantity" min="1" required>
+                <textarea name="message[]" placeholder="Optional Message"></textarea>
+            </div>
+
+            <div id="button-container">
+                <button type="submit" class="btn btn-submit">Submit Donation</button>
+                <button type="button" class="btn btn-add" id="add-book-btn">Add Another Book</button>
+                <button type="button" class="btn btn-add" onclick="goToContribute()">
+    Back to Contribute Page
+</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div id="confirmationBox">
+    <h3>Donation Confirmed 🎉</h3>
+    <p id="confirmationMessage"></p>
+    <button onclick="closeDialog()">OK</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+{% if message %}
+window.onload = function() {
+    const box = document.getElementById("confirmationBox");
+    const msg = document.getElementById("confirmationMessage");
+
+    let bookList = "";
+    {% for i in range(request.form.getlist('title[]')|length) %}
+        bookList += "- {{ request.form.getlist('title[]')[i] }} x {{ request.form.getlist('quantity[]')[i] }}<br>";
+    {% endfor %}
+    msg.innerHTML = `Your books donation has been successfully received:<br><br>${bookList}<br>A confirmation email has been sent to your registered email.`;
+
+    box.style.display = "block";
+    confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+    function fireworks() {
+        for(let i=0;i<5;i++){
+            confetti({ particleCount: 50, spread: 100, startVelocity: 60 + Math.random() * 60, origin: { x: Math.random(), y: Math.random() * 0.6 } });
+        }
+    }
+    setTimeout(fireworks, 500);
+};
+{% endif %}
+
+function closeDialog() {
+    document.getElementById("confirmationBox").style.display = "none";
+}
+
+// Add/remove books dynamically
+const addBookBtn = document.getElementById('add-book-btn');
+const form = document.getElementById('donation-form');
+const buttonContainer = document.getElementById('button-container');
+
+addBookBtn.addEventListener('click', () => {
+    const bookEntry = document.createElement('div');
+    bookEntry.className = 'book-entry';
+    bookEntry.innerHTML = `
+        <input type="text" name="title[]" placeholder="Book Title" required>
+        <input type="text" name="author[]" placeholder="Author Name" required>
+        <select name="genre[]" required>
+            <option value="">Select Genre</option>
+            <option value="Fiction">Fiction</option>
+            <option value="Non-Fiction">Non-Fiction</option>
+            <option value="Education">Education</option>
+            <option value="Storybook">Storybook</option>
+        </select>
+        <select name="condition[]" required>
+            <option value="">Condition</option>
+            <option value="New">New</option>
+            <option value="Used">Used</option>
+        </select>
+        <input type="number" name="quantity[]" placeholder="Quantity" min="1" required>
+        <textarea name="message[]" placeholder="Optional Message"></textarea>
+        <button type="button" class="btn btn-remove">Remove Book</button>
+    `;
+    form.insertBefore(bookEntry, buttonContainer);
+
+    const removeBtn = bookEntry.querySelector('.btn-remove');
+    removeBtn.addEventListener('click', () => {
+        bookEntry.remove();
+    });
+});
+function goToContribute() {
+    window.location.href = "/contribute";
+}
+</script>
+
+</body>
+</html>

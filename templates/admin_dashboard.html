@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard - KINDORA</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: url("/static/child.jpg") center/cover no-repeat;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0; 
+            left: 0;
+            width: 100%; 
+            height: 100%;
+            background: linear-gradient(rgba(5, 15, 25, 0.72), rgba(5, 15, 25, 0.78));
+            z-index: 0;
+            backdrop-filter: blur(0.5px);
+        }
+
+        .top-right {
+            position: absolute;
+            top: 25px;
+            right: 40px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            color: white;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .user-circle {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            font-weight: 700;
+            font-size: 17px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+            border: 2px solid rgba(255,255,255,0.18);
+        }
+
+        .user-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 22px rgba(0,0,0,0.45);
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 64px;
+            right: 0;
+            background: rgba(255,255,255,0.96);
+            min-width: 240px;
+            border-radius: 18px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.28);
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            text-align: center;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .dropdown.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 15px 12px;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-weight: bold;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown a:hover {
+            background: #eaf7ff;
+            color: #0072ff;
+        }
+
+        a.top-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: 0.3s ease;
+            font-size: 15px;
+        }
+
+        a.top-link::after {
+            content: "";
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #8fdcff;
+            transition: 0.3s ease;
+        }
+
+        a.top-link:hover {
+            color: #dff6ff;
+        }
+
+        a.top-link:hover::after {
+            width: 100%;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 1;
+            padding: 100px 20px 40px;
+        }
+
+        .header {
+            font-size: 34px;
+            font-weight: 700;
+            margin-bottom: 55px;
+            text-shadow: 0 4px 14px rgba(0,0,0,0.35);
+            letter-spacing: 0.4px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 28px;
+            max-width: 950px;
+        }
+
+        .module {
+            background: rgba(255,255,255,0.14);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            border-radius: 22px;
+            width: 190px;
+            height: 125px;
+            cursor: pointer;
+            transition: 0.35s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.16);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+        }
+
+        .module:hover {
+            transform: translateY(-8px) scale(1.03);
+            background: rgba(173, 216, 230, 0.95);
+            box-shadow: 0 18px 35px rgba(0,0,0,0.30);
+        }
+
+        a.module-link {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            text-transform: uppercase;
+            line-height: 1.4;
+            transition: color 0.3s ease;
+        }
+
+        .module:hover a.module-link {
+            color: #111;
+        }
+
+        @media (max-width: 768px) {
+            .top-right {
+                top: 18px;
+                right: 20px;
+                gap: 16px;
+            }
+
+            .header {
+                font-size: 26px;
+                margin-bottom: 35px;
+            }
+
+            .container {
+                gap: 20px;
+            }
+
+            .module {
+                width: 170px;
+                height: 110px;
+            }
+
+            a.module-link {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-right {
+                right: 15px;
+                top: 15px;
+            }
+
+            .user-circle {
+                width: 48px;
+                height: 48px;
+                font-size: 15px;
+            }
+
+            .header {
+                font-size: 22px;
+            }
+
+            .module {
+                width: 150px;
+                height: 100px;
+                padding: 20px 15px;
+            }
+
+            a.module-link {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+
+    <div class="top-right">
+        <div class="user-circle" onclick="toggleDropdown()">
+            {{ name[0] }}
+            <div class="dropdown" id="userDropdown">
+                <a href="#">Hey, {{ name }}!</a>
+                <a href="javascript:void(0)">{{ admin_email }}</a>
+                <a href="/admin-logout">Logout</a>
+            </div>
+        </div>
+
+   <!---- <a href="/about" class="top-link">About</a> -->
+        <a href="/admin-dashboard" class="top-link">Home</a>
+    </div>
+
+    <div class="main-content">
+        <div class="header">Welcome Admin, {{ name }}!</div>
+        <div class="container">
+            <div class="module">
+                <a href="/registered-child" class="module-link">Registered Child</a>
+            </div>
+            <div class="module">
+                <a href="/contributed" class="module-link" target="_blank" rel="noopener">Contributed</a>
+            </div>
+            <div class="module">
+                <a href="/adopted" class="module-link">Adopted</a>
+            </div>
+            <div class="module">
+                <a href="/matrimony-requests" class="module-link">Matrimony Requests</a>            
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById("userDropdown");
+            dropdown.classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.user-circle')) {
+                const dropdown = document.getElementById("userDropdown");
+                dropdown.classList.remove("show");
+            }
+        }
+    </script>
+</body>
+</html>

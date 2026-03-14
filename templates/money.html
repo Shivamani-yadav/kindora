@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Donate Money - KINDORA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 40px;
+            border-radius: 20px;
+            width: 380px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0,0,0,0.4);
+            text-align: center;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input {
+            background: #f5f5f5;
+        }
+
+        textarea {
+            resize: none;
+            height: 80px;
+            background: #f5f5f5;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 25px;
+            border: none;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .note {
+            font-size: 12px;
+            margin-top: 15px;
+            color: #ccc;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Donate to KINDORA</h2>
+
+    <form method="POST" onsubmit="return validateAmount()">
+        <input type="number" name="amount" placeholder="Enter Amount (₹)" 
+               id="amountInput" min="1">
+        <div id="amountError" style="color:red; font-size:13px; margin-bottom:10px;"></div>
+
+        <textarea name="message" placeholder="Optional Message"></textarea>
+        <button type="submit">Simulate Payment</button>
+    </form>
+
+    <div class="note">
+        *This is a demo payment system for academic purposes.*
+    </div>
+
+    <button type="button" onclick="goToContribute()" 
+        style="margin-top:15px; background:#203a43;">
+    Back to Contribute Page
+</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<div id="confirmationBox" style="
+display:none;
+position:fixed;
+top:50%; left:50%;
+transform:translate(-50%,-50%);
+background:#ffffff;
+color:black;
+padding:30px 25px;
+border-radius:20px;
+box-shadow:0 5px 25px rgba(0,0,0,0.3);
+text-align:center;
+z-index:1000;
+width: 350px;
+">
+    <h3>Payment Confirmed 🎉</h3>
+    <p id="confirmationMessage"></p>
+    <button onclick="closeDialog()" style="
+        margin-top:20px;
+        padding:10px 20px;
+        background:linear-gradient(to right, #00c6ff, #0072ff);
+        border:none;
+        border-radius:20px;
+        color:white;
+        font-weight:bold;
+        cursor:pointer;
+    ">OK</button>
+</div>
+
+<script>
+function validateAmount() {
+    var amount = document.getElementById("amountInput").value;
+    var error = document.getElementById("amountError");
+
+    if (!amount || amount <= 0) {
+        error.innerText = "Add valid amount";
+        return false;
+    }
+
+    error.innerText = "";
+    return true;
+}
+
+function closeDialog() {
+    document.getElementById("confirmationBox").style.display = "none";
+}
+
+function goToContribute() {
+    window.location.href = "/contribute";
+}
+</script>
+
+</body>
+</html>

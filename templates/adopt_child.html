@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adopt a Child - KINDORA</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background:
+            linear-gradient(rgba(8, 25, 43, 0.45), rgba(8, 25, 43, 0.58)),
+            linear-gradient(135deg, #89f7fe, #66a6ff);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        margin: 0;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(circle at top left, rgba(255,255,255,0.22), transparent 35%),
+            radial-gradient(circle at bottom right, rgba(255,255,255,0.14), transparent 30%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .form-box {
+        position: relative;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        padding: 42px 34px;
+        width: 480px;
+        border-radius: 28px;
+        box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.20),
+            inset 0 1px 0 rgba(255,255,255,0.30);
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+        border: 1px solid rgba(255,255,255,0.28);
+    }
+
+    .form-box:hover {
+        transform: translateY(-6px);
+        box-shadow:
+            0 28px 70px rgba(0, 0, 0, 0.24),
+            inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 28px;
+        font-size: 30px;
+        color: #ffffff;
+        letter-spacing: 0.6px;
+        font-weight: 700;
+        text-shadow: 0 3px 10px rgba(0,0,0,0.18);
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 13px 15px;
+        margin-bottom: 18px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.30);
+        font-size: 14px;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.3s ease;
+        background: rgba(255,255,255,0.92);
+        color: #1a1a1a;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: #666;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        border-color: #0072ff;
+        box-shadow: 0 0 0 4px rgba(0, 114, 255, 0.14);
+        outline: none;
+        transform: translateY(-1px);
+        background: #fff;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 90px;
+    }
+
+    label {
+        font-weight: 600;
+        margin-bottom: 7px;
+        display: block;
+        color: #ffffff;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+    }
+
+    input[type="checkbox"] {
+        width: auto;
+        margin-right: 10px;
+        transform: scale(1.08);
+        accent-color: #0072ff;
+        vertical-align: middle;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        color: #fff;
+        border: none;
+        border-radius: 14px;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 12px 25px rgba(0, 114, 255, 0.26);
+        letter-spacing: 0.3px;
+    }
+
+    button:hover {
+        background: linear-gradient(135deg, #1cd8ff, #005ac1);
+        transform: translateY(-2px);
+        box-shadow: 0 16px 28px rgba(0, 114, 255, 0.32);
+    }
+
+    button:active {
+        transform: scale(0.98);
+    }
+
+    button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .note {
+        font-size: 12px;
+        color: rgba(255,255,255,0.92);
+        margin-top: 18px;
+        text-align: center;
+        line-height: 1.7;
+        background: rgba(255,255,255,0.08);
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    #children_info {
+        background: rgba(255,255,255,0.14);
+        padding: 16px 15px 10px 15px;
+        border-radius: 16px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(255,255,255,0.18);
+        display: none;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+
+    #children_genders_container label {
+        margin-top: 10px;
+        font-weight: 500;
+        color: #f5fbff;
+    }
+
+    a {
+        color: #ffffff;
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        transition: 0.3s ease;
+    }
+
+    a:hover {
+        color: #dff3ff;
+    }
+
+    /* Confirmation Modal */
+    #confirmationBox {
+        display: none;
+        position: fixed;
+        top:0; left:0;
+        width:100%; height:100%;
+        background: rgba(0,0,0,0.48);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index:1000;
+        justify-content:center;
+        align-items:center;
+        animation: fadeIn 0.3s ease forwards;
+        padding: 20px;
+    }
+
+    .modal-content {
+        background: rgba(255,255,255,0.96);
+        padding: 36px 30px;
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        max-width: 430px;
+        width: 90%;
+        text-align: center;
+        animation: slideIn 0.4s ease forwards;
+        border: 1px solid rgba(255,255,255,0.7);
+    }
+
+    .modal-content h3 {
+        font-size: 23px;
+        color: #0072ff;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+
+    .modal-content p {
+        font-size: 14px;
+        color: #333;
+        line-height: 1.7;
+        margin-bottom: 25px;
+        text-align: left;
+    }
+
+    .modal-content button {
+        padding: 12px 28px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(to right, #00c6ff, #0072ff);
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: auto;
+        min-width: 120px;
+    }
+
+    .modal-content button:hover {
+        transform: translateY(-2px) scale(1.03);
+    }
+
+    /* Terms Modal enhanced only with CSS */
+    #termsModal {
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        padding: 20px;
+    }
+
+    #termsModal > div {
+        background: rgba(255,255,255,0.98) !important;
+        padding: 28px !important;
+        border-radius: 22px !important;
+        width: 400px !important;
+        max-height: 70vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 55px rgba(0,0,0,0.24);
+        font-family: 'Poppins', sans-serif;
+        animation: slideIn 0.35s ease forwards;
+    }
+
+    #termsModal h3 {
+        margin-top: 0;
+        margin-bottom: 16px;
+        font-size: 24px;
+        color: #0072ff;
+        text-align: center;
+    }
+
+    #termsModal p {
+        color: #333;
+        line-height: 1.8;
+        font-size: 14px;
+    }
+
+    #termsModal button {
+        margin-top: 18px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-22px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: 540px) {
+        .form-box {
+            width: 100%;
+            padding: 30px 20px;
+            border-radius: 22px;
+        }
+
+        h2 {
+            font-size: 25px;
+        }
+
+        input, select, textarea, button {
+            font-size: 14px;
+        }
+
+        #termsModal > div {
+            width: 100% !important;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Adoption Application</h2>
+    <form method="POST">
+        <input type="text" name="full_name" placeholder="Full Name" required>
+        <input type="number" name="age" placeholder="Your Age (Minimum 25)" min="25" required>
+
+        <label>Marital Status</label>
+        <select name="marital_status" required>
+            <option value="">Select</option>
+            <option value="Married">Married</option>
+        </select>
+
+        <label>Spouse Type</label>
+        <select name="spouse_type" required>
+            <option value="">Select</option>
+            <option value="Husband">Husband</option>
+            <option value="Wife">Wife</option>
+        </select>
+
+        <input type="number" name="marriage_years" placeholder="Years of Marriage" min="1" required>
+        <input type="text" name="income" placeholder="Annual Income" required>
+        <input type="text" name="occupation" placeholder="Occupation" required>
+
+        <input type="text" name="aadhaar" placeholder="Aadhaar Number (12 digits)" 
+        pattern="[0-9]{12}" maxlength="12" required>
+
+        <input type="text" name="pan_card" placeholder="PAN Card Number" 
+        pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" style="text-transform:uppercase" required>
+        <label>Type of Residence</label>
+        <select name="home_type" required>
+            <option value="">Select</option>
+            <option>Owned House</option>
+            <option>Rented House</option>
+        </select>
+
+        <textarea name="address" placeholder="Full Address" required></textarea>
+
+        <label>Do you have children?</label>
+        <select name="has_children" required onchange="toggleChildrenFields(this.value)">
+            <option value="">Select</option>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+        </select>
+
+        <div id="children_info">
+            <label>Number of Children</label>
+            <select name="children_count" id="children_count" onchange="generateGenderFields()">
+                <option value="">Select</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+            <div id="children_genders_container"></div>
+        </div>
+
+        <label>
+            <input type="checkbox" name="agree_rules" required>
+            I confirm that all information provided is true and I agree to legal verification.
+        </label>
+
+        <label>
+            <input type="checkbox" id="termsCheck" required>
+            I agree to the <a href="#" onclick="openTerms(); return false;">Terms & Conditions</a>
+        </label>
+
+        <button type="submit" id="submitBtn" disabled>Submit Application</button>
+    </form>
+
+    <div class="note">
+        * All applications are subject to manual verification.<br>
+        * Final approval depends on eligibility and legal compliance.
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="confirmationBox">
+    <div class="modal-content">
+        <h3>Application Submitted Successfully 🎉</h3>
+        <p id="confirmationMessage"></p>
+        <button onclick="closeDialog()">OK</button>
+    </div>
+</div>
+<!-- Terms & Conditions Modal -->
+<div id="termsModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
+    <div style="background:#fff; padding:25px; border-radius:15px; width:400px; max-height:70vh; overflow-y:auto;">
+        <h3>Terms & Conditions</h3>
+
+        <p>
+        1. The applicant must be at least 25 years old.<br><br>
+        2. All information provided must be true and verifiable.<br><br>
+        3. The adoption request will undergo manual verification by the organization.<br><br>
+        4. Background checks and home verification may be conducted.<br><br>
+        5. Submission of the form does not guarantee adoption approval.<br><br>
+        6. The organization reserves the right to reject applications that do not meet eligibility criteria.<br><br>
+        7. All adoption procedures must comply with legal regulations and child welfare policies.
+        </p>
+
+        <button onclick="closeTerms()">Close</button>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+function toggleChildrenFields(value){
+    const container = document.getElementById("children_info");
+    container.style.display = (value === "Yes") ? "block" : "none";
+    document.getElementById("children_genders_container").innerHTML = "";
+}
+
+function generateGenderFields(){
+    const count = parseInt(document.getElementById("children_count").value);
+    const container = document.getElementById("children_genders_container");
+    container.innerHTML = "";
+    for(let i=1; i<=count; i++){
+        const label = document.createElement("label");
+        label.innerHTML = `Child ${i} Gender:`;
+        const select = document.createElement("select");
+        select.name = `child_gender_${i}`;
+        select.required = true;
+
+        ["Select","Male","Female"].forEach(g => {
+            const opt = document.createElement("option");
+            opt.value = g === "Select" ? "" : g;
+            opt.text = g;
+            select.appendChild(opt);
+        });
+
+        container.appendChild(label);
+        container.appendChild(select);
+    }
+}
+
+function closeDialog(){
+    document.getElementById("confirmationBox").style.display = "none";
+}
+
+// Show confirmation modal only if Flask sets `submitted=True`
+{% if submitted and applicant %}
+document.addEventListener("DOMContentLoaded", function(){
+    const box = document.getElementById("confirmationBox");
+    const msg = document.getElementById("confirmationMessage");
+    let childrenDetails = "";
+    {% if applicant.has_children == 'Yes' %}
+        let numChildren = {{ applicant.children_count }};
+        if(numChildren > 0){
+            childrenDetails += "<br><strong>Children Details:</strong><br>";
+            {% for i in range(applicant.children_count) %}
+                childrenDetails += "Child {{ i+1 }}: {{ applicant.children_genders[i] }}<br>";
+            {% endfor %}
+        }
+    {% endif %}
+    msg.innerHTML = `
+        Your adoption application has been successfully submitted.<br><br>
+        <strong>Applicant Details:</strong><br>
+        Name: {{ applicant.full_name }}<br>
+        Age: {{ applicant.age }}<br>
+        Marital Status: {{ applicant.marital_status }}<br>
+        Spouse Type: {{ applicant.spouse_type }}<br>
+        Years of Marriage: {{ applicant.marriage_years }}<br>
+        Income: {{ applicant.income }}<br>
+        Home Type: {{ applicant.home_type }}<br>
+        Address: {{ applicant.address }}<br>
+        ${childrenDetails}<br>
+        Our team will review it and contact you via your registered email.
+    `;
+    box.style.display = "flex";
+    confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+});
+{% endif %}
+// Enable submit only if Terms & Conditions is checked
+document.addEventListener("DOMContentLoaded", function(){
+    const terms = document.getElementById("termsCheck");
+    const submitBtn = document.getElementById("submitBtn");
+
+    terms.addEventListener("change", function(){
+        submitBtn.disabled = !this.checked;
+    });
+});
+function openTerms(){
+    document.getElementById("termsModal").style.display = "flex";
+}
+
+function closeTerms(){
+    document.getElementById("termsModal").style.display = "none";
+}
+</script>
+</body>
+</html>

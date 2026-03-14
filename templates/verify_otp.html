@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify OTP - KINDORA</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', Arial, sans-serif;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Background image with dark overlay */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url("/static/child.jpg") center/cover no-repeat;
+            filter: brightness(35%) contrast(105%);
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(5,20,30,0.58), rgba(0,0,0,0.52));
+            z-index: -1;
+        }
+
+        /* Center card */
+        .container {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            padding: 42px 32px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 380px;
+            animation: fadeIn 0.8s ease-in-out;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.38);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            font-size: 30px;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            color: #ffffff;
+            text-shadow: 0 4px 14px rgba(0,0,0,0.22);
+        }
+
+        /* Input field */
+        input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            margin: 15px 0;
+            border-radius: 14px;
+            border: none;
+            font-size: 15px;
+            text-align: center;
+            letter-spacing: 3px;
+            font-family: 'Poppins', Arial, sans-serif;
+            background: rgba(255,255,255,0.92);
+            color: #111;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        input[type="text"]::placeholder {
+            color: #666;
+            letter-spacing: 1px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(0,198,255,0.25);
+            transform: translateY(-1px);
+        }
+
+        /* Verify button */
+        .btn {
+            width: 100%;
+            padding: 13px;
+            margin-top: 10px;
+            background: linear-gradient(135deg, #ffffff, #dff2ff);
+            color: #111;
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 15px;
+            font-family: 'Poppins', Arial, sans-serif;
+            cursor: pointer;
+            transition: 0.3s ease;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.22);
+            letter-spacing: 0.3px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #ffffff, #cfeeff);
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 14px 28px rgba(0,0,0,0.28);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Resend button */
+        .resend {
+            margin-top: 18px;
+            display: inline-block;
+            font-size: 14px;
+            color: #9edfff;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-weight: 500;
+            transition: 0.3s ease;
+        }
+
+        .resend:disabled {
+            color: rgba(255,255,255,0.45);
+            cursor: not-allowed;
+        }
+
+        .resend:hover:not(:disabled) {
+            text-decoration: underline;
+            color: #d8f4ff;
+        }
+
+        /* Error message */
+        .error {
+            color: #ff7b7b;
+            margin-top: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            background: rgba(255, 0, 0, 0.10);
+            border: 1px solid rgba(255, 120, 120, 0.22);
+            padding: 10px 12px;
+            border-radius: 12px;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-12px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 34px 22px;
+                border-radius: 20px;
+            }
+
+            h2 {
+                font-size: 25px;
+            }
+
+            input[type="text"],
+            .btn {
+                font-size: 14px;
+            }
+
+            input[type="text"] {
+                letter-spacing: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Verify OTP</h2>
+
+    <!-- OTP Form -->
+    <form method="POST">
+        <input type="text" name="otp" placeholder="Enter 6-digit OTP" required>
+
+        {% if message %}
+            <div class="error">{{ message }}</div>
+        {% endif %}
+
+        <button type="submit" class="btn">Verify OTP</button>
+    </form>
+
+    <!-- Resend OTP Form -->
+   <!-- Resend OTP Form -->
+<button type="button" class="resend" id="resendBtn" disabled>Resend OTP (60s)</button>
+
+<script>
+let resendBtn = document.getElementById('resendBtn');
+let countdown = 30;
+
+// Countdown timer function
+function startCountdown() {
+    resendBtn.disabled = true;
+    let interval = setInterval(() => {
+        resendBtn.textContent = `Resend OTP (${countdown}s)`;
+        countdown--;
+        if (countdown < 0) {
+            clearInterval(interval);
+            resendBtn.disabled = false;
+            resendBtn.textContent = "Resend OTP";
+            countdown = 30; // reset countdown for next time
+        }
+    }, 1000);
+}
+
+// Start countdown on page load
+startCountdown();
+
+// Handle resend OTP click using AJAX
+resendBtn.addEventListener('click', function() {
+    fetch('/forgot-password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'email={{ session.get("reset_email") }}'
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert('A new OTP has been sent to your email.');
+        startCountdown();  // restart countdown
+    })
+    .catch(err => {
+        alert('Failed to resend OTP. Try again.');
+    });
+});
+</script>
+</body>
+</html>

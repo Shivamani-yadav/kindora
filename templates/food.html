@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donate Food - KINDORA</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background:
+        linear-gradient(135deg, rgba(232,240,242,0.9), rgba(249,251,252,0.85)),
+        url("/static/child1.jpg") center/cover no-repeat;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color: #fff;
+    padding: 35px 20px;
+    text-align: center;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.25);
+}
+
+header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* Container */
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Main Card */
+.donate-section {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(14px);
+    padding: 40px 35px;
+    border-radius: 22px;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+    transition: 0.35s ease;
+}
+
+.donate-section:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 55px rgba(0,0,0,0.18);
+}
+
+.donate-section h2 {
+    color: #203a43;
+    margin-bottom: 30px;
+    font-size: 28px;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* Inputs */
+form input, form select, form textarea {
+    width: 100%;
+    padding: 13px 15px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    border: 1px solid #d8d8d8;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    border-color: #203a43;
+    outline: none;
+    box-shadow: 0 0 8px rgba(32,58,67,0.15);
+    background: #fff;
+}
+
+form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 14px 25px;
+    border-radius: 30px;
+    border: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.btn-submit {
+    background: linear-gradient(to right,#f7971e,#ffd200);
+    color: #111;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+}
+
+.btn-add {
+    background: linear-gradient(135deg,#f35b0a,#010914);
+    color: white;
+}
+
+.btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+}
+
+.btn-remove {
+    background: linear-gradient(135deg,#e74c3c,#c0392b);
+    color: #fff;
+}
+
+/* Food Entry */
+.food-entry {
+    border: 1px solid #eee;
+    padding: 25px;
+    border-radius: 18px;
+    background: #ffffff;
+    margin-bottom: 22px;
+    transition: 0.3s;
+}
+
+.food-entry:hover {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* Extra Items */
+.extra-items h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #203a43;
+    font-weight: 600;
+}
+
+.extra-item-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
+    gap: 15px;
+}
+
+.extra-item {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Checkbox styling */
+.checkbox-container {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 6px;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #00c6ff;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-container .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* Buttons layout */
+#button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 15px;
+}
+
+/* Confirmation modal */
+#confirmationBox {
+    display: none;
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(15px);
+    color: black;
+    padding: 35px 30px;
+    border-radius: 26px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    text-align: center;
+    z-index: 1000;
+    width: 360px;
+}
+
+#confirmationBox button {
+    margin-top: 22px;
+    padding: 12px 25px;
+    background: linear-gradient(to right,#00c6ff,#0072ff);
+    border: none;
+    border-radius: 30px;
+    color: white;
+    font-weight: bold;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    header h1 {
+        font-size: 26px;
+    }
+
+    .donate-section {
+        padding: 28px 18px;
+    }
+
+    .extra-item-grid {
+        grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Donate Food - KINDORA</h1>
+</header>
+
+<!-- REST OF YOUR ORIGINAL HTML AND JAVASCRIPT REMAINS 100% UNCHANGED -->
+
+<div class="container">
+    <div class="donate-section">
+        <h2>Make a Difference by Donating Food</h2>
+
+        <form method="POST" enctype="multipart/form-data" id="donation-form">
+
+            <div class="food-entry">
+                <input type="text" name="food_name[]" placeholder="Food Name" required>
+                <input type="text" name="quantity[]" placeholder="Quantity" required>
+                <input type="text" name="unit[]" placeholder="Unit (kg, pack, liter)" required>
+                <textarea name="message[]" placeholder="Optional Message"></textarea>
+                <select name="food_type[]" required>
+                    <option value="">Food Type</option>
+                    <option value="Dry">Dry</option>
+                    <option value="Packaged">Packaged</option>
+                    <option value="Fresh">Fresh</option>
+                    <option value="Ready-to-eat">Ready-to-eat</option>
+                </select>
+                <select name="occasion[]" required>
+                    <option value="">Occasion (Optional)</option>
+                    <option value="Birthday">Birthday</option>
+                    <option value="Marriage Day">Marriage Day</option>
+                    <option value="Retirement">Retirement</option>
+                </select>
+                <input type="date" name="donation_date[]" placeholder="Select Donation Date" required min="">
+
+                <div class="extra-items">
+                    <h4>Extra Items (Optional)</h4>
+                    <div class="extra-item-grid">
+                        <div class="extra-item">
+                            <label class="checkbox-container">Ice Cream
+                                <input type="checkbox" name="extra_item[]" value="Ice Cream">
+                                <span class="checkmark"></span>
+                            </label>
+                            <input type="number" name="extra_quantity[]" placeholder="Qty">
+                        </div>
+                        <div class="extra-item">
+                            <label class="checkbox-container">Water Bottle
+                                <input type="checkbox" name="extra_item[]" value="Water Bottle">
+                                <span class="checkmark"></span>
+                            </label>
+                            <input type="number" name="extra_quantity[]" placeholder="Qty">
+                        </div>
+                        <div class="extra-item">
+                            <label class="checkbox-container">Snacks
+                                <input type="checkbox" name="extra_item[]" value="Snacks">
+                                <span class="checkmark"></span>
+                            </label>
+                            <input type="number" name="extra_quantity[]" placeholder="Qty">
+                        </div>
+                        <div class="extra-item">
+                            <label class="checkbox-container">Juice
+                                <input type="checkbox" name="extra_item[]" value="Juice">
+                                <span class="checkmark"></span>
+                            </label>
+                            <input type="number" name="extra_quantity[]" placeholder="Qty">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="button-container">
+                <button type="submit" class="btn btn-submit">Submit Donation</button>
+                <button type="button" class="btn btn-add" id="add-food-btn">Add Another Food Item</button>
+                <button type="button" class="btn btn-add" onclick="goToContribute()">Go to Contribute Page</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div id="confirmationBox">
+    <h3>Donation Confirmed 🎉</h3>
+    <p id="confirmationMessage">Your food donation has been successfully submitted! A confirmation email has been sent.</p>
+    <button onclick="closeDialog()">OK</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+function closeDialog() {
+    document.getElementById("confirmationBox").style.display = "none";
+}
+
+// Set min date for donation
+document.querySelectorAll('input[type="date"]').forEach(dateInput => {
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+});
+
+// Add/remove food dynamically
+const addFoodBtn = document.getElementById('add-food-btn');
+const form = document.getElementById('donation-form');
+const buttonContainer = document.getElementById('button-container');
+
+addFoodBtn.addEventListener('click', () => {
+    const foodEntry = document.createElement('div');
+    foodEntry.className = 'food-entry';
+    foodEntry.innerHTML = `
+        <input type="text" name="food_name[]" placeholder="Food Name" required>
+        <input type="text" name="quantity[]" placeholder="Quantity" required>
+        <input type="text" name="unit[]" placeholder="Unit (kg, pack, liter)" required>
+        <textarea name="message[]" placeholder="Optional Message"></textarea>
+        <select name="food_type[]" required>
+            <option value="">Food Type</option>
+            <option value="Dry">Dry</option>
+            <option value="Packaged">Packaged</option>
+            <option value="Fresh">Fresh</option>
+            <option value="Ready-to-eat">Ready-to-eat</option>
+        </select>
+        <select name="occasion[]" required>
+            <option value="">Occasion (Optional)</option>
+            <option value="Birthday">Birthday</option>
+            <option value="Marriage Day">Marriage Day</option>
+            <option value="Retirement">Retirement</option>
+        </select>
+        <input type="date" name="donation_date[]" placeholder="Select Donation Date" required min="">
+        <div class="extra-items">
+            <h4>Extra Items (Optional)</h4>
+            <div class="extra-item-grid">
+                <div class="extra-item">
+                    <label class="checkbox-container">Ice Cream
+                        <input type="checkbox" name="extra_item[]" value="Ice Cream">
+                        <span class="checkmark"></span>
+                    </label>
+                    <input type="number" name="extra_quantity[]" placeholder="Qty">
+                </div>
+                <div class="extra-item">
+                    <label class="checkbox-container">Water Bottle
+                        <input type="checkbox" name="extra_item[]" value="Water Bottle">
+                        <span class="checkmark"></span>
+                    </label>
+                    <input type="number" name="extra_quantity[]" placeholder="Qty">
+                </div>
+                <div class="extra-item">
+                    <label class="checkbox-container">Snacks
+                        <input type="checkbox" name="extra_item[]" value="Snacks">
+                        <span class="checkmark"></span>
+                    </label>
+                    <input type="number" name="extra_quantity[]" placeholder="Qty">
+                </div>
+                <div class="extra-item">
+                    <label class="checkbox-container">Juice
+                        <input type="checkbox" name="extra_item[]" value="Juice">
+                        <span class="checkmark"></span>
+                    </label>
+                    <input type="number" name="extra_quantity[]" placeholder="Qty">
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-remove">Remove Food Item</button>
+    `;
+    form.insertBefore(foodEntry, buttonContainer);
+
+    const removeBtn = foodEntry.querySelector('.btn-remove');
+    removeBtn.addEventListener('click', () => { foodEntry.remove(); });
+});
+
+// Show confirmation after normal form submission
+form.addEventListener("submit", function(e){
+    setTimeout(() => {
+        document.getElementById("confirmationBox").style.display = "block";
+        confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+        window.scrollTo(0,0);
+    }, 100);
+});
+function goToContribute() {
+    window.location.href = "/contribute";
+}
+
+</script>
+
+</body>
+</html>

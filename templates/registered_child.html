@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registered Children - KINDORA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset */
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        :root{
+            --brand:#1E88E5;
+            --brandDark:#1565C0;
+            --success:#43A047;
+            --successDark:#2E7D32;
+            --danger:#E53935;
+            --dangerDark:#B71C1C;
+            --muted:#757575;
+            --mutedDark:#424242;
+            --card:#ffffff;
+            --text:#1f2937;
+            --sub:#6b7280;
+            --shadow: 0 10px 30px rgba(0,0,0,0.12);
+            --shadow2: 0 18px 50px rgba(0,0,0,0.18);
+            --radius: 14px;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background:
+                radial-gradient(1200px 600px at 10% 0%, rgba(30,136,229,0.18), transparent 60%),
+                radial-gradient(900px 500px at 90% 10%, rgba(67,160,71,0.12), transparent 55%),
+                linear-gradient(135deg, #eef7ff, #f3fff4);
+            color: var(--text);
+            padding: 22px;
+            min-height: 100vh;
+        }
+
+        /* Layout wrapper */
+        .wrap{
+            width: 92%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .page-header{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .title-block{
+            display:flex;
+            flex-direction:column;
+            gap: 4px;
+        }
+
+        h2 {
+            color: var(--brand);
+            font-weight: 800;
+            font-size: 28px;
+            letter-spacing: 0.2px;
+            line-height: 1.15;
+        }
+
+        .subtitle{
+            color: var(--sub);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Top Button */
+        .top-buttons {
+            display: flex;
+            justify-content: flex-start;
+        }
+        .top-buttons a {
+            text-decoration: none;
+            background: linear-gradient(135deg, var(--brand), var(--brandDark));
+            color: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+            box-shadow: 0 8px 18px rgba(30,136,229,0.22);
+            border: 1px solid rgba(255,255,255,0.25);
+            display:inline-flex;
+            align-items:center;
+            gap: 8px;
+        }
+        .top-buttons a:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 26px rgba(30,136,229,0.28);
+            filter: brightness(1.02);
+        }
+
+        /* Table Card */
+        .card{
+            background: rgba(255,255,255,0.65);
+            border: 1px solid rgba(255,255,255,0.45);
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            overflow:hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--card);
+        }
+
+        thead th{
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            text-align: center;
+            font-size: 14px;
+        }
+        th {
+            background: linear-gradient(135deg, var(--brand), var(--brandDark));
+            color: white;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        tbody tr {
+            transition: background 0.18s ease, transform 0.18s ease;
+        }
+        tbody tr:nth-child(even) { background: #fbfdff; }
+        tbody tr:hover { background: #eef6ff; }
+
+        td{
+            border-bottom: 1px solid rgba(15,23,42,0.06);
+            color: #111827;
+            font-weight: 500;
+        }
+
+        /* Small email look */
+        .email{
+            font-weight: 600;
+            color:#0f172a;
+            word-break: break-word;
+        }
+
+        /* Images */
+        img.child-photo {
+            width: 78px;
+            height: 58px;
+            object-fit: cover;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+            border: 1px solid rgba(255,255,255,0.55);
+        }
+        img.child-photo:hover {
+            transform: scale(1.06);
+            box-shadow: 0 16px 30px rgba(0,0,0,0.18);
+            filter: saturate(1.05);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-weight: 700;
+            font-size: 13px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+            box-shadow: 0 10px 18px rgba(0,0,0,0.10);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+        .btn:active{ transform: translateY(1px); }
+
+        .approve { background: linear-gradient(135deg, var(--success), var(--successDark)); }
+        .approve:hover { filter: brightness(1.02); box-shadow: 0 14px 24px rgba(67,160,71,0.20); }
+
+        .cancel { background: linear-gradient(135deg, var(--danger), var(--dangerDark)); }
+        .cancel:hover { filter: brightness(1.02); box-shadow: 0 14px 24px rgba(229,57,53,0.20); }
+
+        .delete { background: linear-gradient(135deg, var(--muted), var(--mutedDark)); }
+        .delete:hover { filter: brightness(1.02); box-shadow: 0 14px 24px rgba(66,66,66,0.18); }
+
+        .details {
+            background: linear-gradient(135deg, var(--brand), var(--brandDark));
+            padding: 8px 12px;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.22);
+            box-shadow: 0 10px 18px rgba(30,136,229,0.16);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+        }
+        .details:hover { transform: translateY(-1px); box-shadow: 0 14px 24px rgba(30,136,229,0.20); filter: brightness(1.01); }
+
+        /* Status pills */
+        .pill{
+            display:inline-flex;
+            align-items:center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 12px;
+            letter-spacing: 0.2px;
+            border: 1px solid rgba(15,23,42,0.08);
+            background: rgba(15,23,42,0.03);
+        }
+        .dot{
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            display:inline-block;
+        }
+
+        .status-pending { color: var(--brand); background: rgba(30,136,229,0.08); border-color: rgba(30,136,229,0.16); }
+        .status-pending .dot{ background: var(--brand); }
+
+        .status-approved { color: var(--success); background: rgba(67,160,71,0.10); border-color: rgba(67,160,71,0.18); }
+        .status-approved .dot{ background: var(--success); }
+
+        .status-cancelled { color: var(--danger); background: rgba(229,57,53,0.10); border-color: rgba(229,57,53,0.18); }
+        .status-cancelled .dot{ background: var(--danger); }
+
+        /* Modals */
+        .modal, .details-modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background: rgba(3,7,18,0.72);
+            backdrop-filter: blur(6px);
+            padding: 24px 14px;
+        }
+
+        /* Image modal content (keep <img> element as is, just style it) */
+        #modalImg.modal-content{
+            display:block;
+            margin: 40px auto 0;
+            max-width: min(980px, 92vw);
+            max-height: 80vh;
+            border-radius: 16px;
+            box-shadow: var(--shadow2);
+            border: 1px solid rgba(255,255,255,0.22);
+            background: #fff;
+            padding: 10px;
+            object-fit: contain;
+        }
+
+        /* Details modal card */
+        .details-content {
+            margin: 40px auto 0;
+            background: white;
+            padding: 22px 22px 18px;
+            border-radius: 16px;
+            max-width: 650px;
+            color: #111827;
+            text-align: left;
+            position: relative;
+            animation: fadeIn 0.22s ease;
+            box-shadow: var(--shadow2);
+            border: 1px solid rgba(255,255,255,0.22);
+        }
+
+        .details-content h2{
+            margin-bottom: 12px;
+            font-size: 22px;
+            color: #0f172a;
+            text-align:left;
+        }
+
+        .close {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            font-size: 28px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.9);
+            cursor: pointer;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+            user-select:none;
+        }
+        .close:hover { transform: scale(1.05); opacity: 0.95; }
+
+        /* Close inside details modal is white now because it's in overlay; keep same element */
+        #detailsModal .close{
+            color: rgba(255,255,255,0.95);
+        }
+
+        .details-row {
+            margin: 10px 0;
+            padding: 10px 12px;
+            background: rgba(15,23,42,0.03);
+            border: 1px solid rgba(15,23,42,0.06);
+            border-radius: 12px;
+        }
+        .details-row strong {
+            display: inline-block;
+            width: 150px;
+            color:#0f172a;
+        }
+
+        /* Detail photo inside modal */
+        .details-content img{
+            width: 170px !important;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 14px !important;
+            box-shadow: 0 16px 30px rgba(0,0,0,0.16);
+            border: 1px solid rgba(255,255,255,0.55);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media screen and (max-width: 900px) {
+            .wrap{ width: 98%; }
+            th, td { font-size: 13px; padding: 10px; }
+            .page-header{ flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="page-header">
+            <div class="top-buttons">
+                <a href="/admin-dashboard">🏠 Home</a>
+              
+            </div>
+            <div class="title-block">
+                <h2>Registered Children</h2>
+                <div class="subtitle">Manage submissions, verify details, and take action.</div>
+                
+            </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
+            <form method="POST" action="/child-approve-all" onsubmit="return confirm('Approve all pending children?');">
+                 <button type="submit" class="btn approve">Approve All</button>
+            </form>
+        </div>
+
+        <div class="card">
+             
+            <table>
+                <thead>
+                    
+                    <tr>
+                        <th>Sl. No</th>
+                        <th>User Email</th>
+                        <th>Name</th>
+                        <th>Full Details</th>
+                        <th>Photo</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for child in children %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td class="email">{{ child[1] }}</td>
+                        <td>{{ child[2] }}</td>
+                        <td>
+                            <button class="details" onclick="openDetailsModal({{ loop.index0 }})">View Details</button>
+                        </td>
+                        <td>
+                            <img src="{{ url_for('static', filename='uploads/' ~ child[7]) }}"
+                                 alt="Child Photo" class="child-photo" onclick="openModal(this)">
+                        </td>
+                        <td>
+                            {% if child[9] == 'Pending' %}
+                                <span class="pill status-pending"><span class="dot"></span>{{ child[9] }}</span>
+                            {% elif child[9] == 'Approved' %}
+                                <span class="pill status-approved"><span class="dot"></span>{{ child[9] }}</span>
+                            {% elif child[9] == 'Cancelled' %}
+                                <span class="pill status-cancelled"><span class="dot"></span>{{ child[9] }}</span>
+                            {% else %}
+                                <span class="pill"><span class="dot" style="background:#6b7280"></span>{{ child[9] }}</span>                            {% endif %}
+                        </td>
+                        <td>
+                            {% if child[9] == 'Pending' %}
+                                <form method="POST" action="/child-action" style="display:inline-block;">
+                                    <input type="hidden" name="child_id" value="{{ child[0] }}">
+                                    <button type="submit" name="action" value="approved" class="btn approve">Approve</button>
+                                    <button type="submit" name="action" value="cancelled" class="btn cancel">Cancel</button>
+                                </form>
+                            {% else %}
+                                <form method="POST" action="/child-delete" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this child?');">
+                                    <input type="hidden" name="child_id" value="{{ child[0] }}">
+                                    <button type="submit" class="btn delete">Delete</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imgModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+
+    <!-- Details Modal -->
+    <div id="detailsModal" class="details-modal">
+        <span class="close" onclick="closeDetailsModal()">&times;</span>
+        <div class="details-content" id="detailsContent"></div>
+    </div>
+
+    <script>
+        function openModal(img) {
+            document.getElementById("imgModal").style.display = "block";
+            document.getElementById("modalImg").src = img.src;
+        }
+        function closeModal() { document.getElementById("imgModal").style.display = "none"; }
+
+        const childrenData = [
+            {% for child in children %}
+            {
+                "user_name": "{{ child[2] }}",
+                "user_email": "{{ child[1] }}",
+                "phone": "{{ child[3] }}",
+                "user_address": "{{ child[4] }}",
+                "child_name": "{{ child[5] }}",
+                "child_address": "{{ child[6] }}",
+                "police_station_id": "{{ child[8] }}",
+                "child_photo": "{{ url_for('static', filename='uploads/' ~ child[7]) }}",
+                "status": "{{ child[9] }}"
+            },
+            {% endfor %}
+        ];
+
+        function openDetailsModal(index) {
+            const child = childrenData[index];
+            const contentDiv = document.getElementById("detailsContent");
+            contentDiv.innerHTML = `
+                <h2>Child Details</h2>
+                <img src="${child.child_photo}" style="display:block; margin:10px auto 18px; width:150px; border-radius:10px;">
+                <div class="details-row"><strong>User Name:</strong> ${child.user_name}</div>
+                <div class="details-row"><strong>User Email:</strong> ${child.user_email}</div>
+                <div class="details-row"><strong>Phone:</strong> ${child.phone}</div>
+                <div class="details-row"><strong>User Address:</strong> ${child.user_address}</div>
+                <div class="details-row"><strong>Police Station ID:</strong> ${child.police_station_id}</div>
+                <div class="details-row"><strong>Child Name:</strong> ${child.child_name}</div>
+                <div class="details-row"><strong>Child Address:</strong> ${child.child_address}</div>
+                <div class="details-row"><strong>Status:</strong> ${child.status}</div>
+            `;
+            document.getElementById("detailsModal").style.display = "block";
+        }
+        function closeDetailsModal() { document.getElementById("detailsModal").style.display = "none"; }
+
+        // Optional: click outside to close (doesn't change functionality, just UX)
+        window.addEventListener("click", function(e){
+            const imgModal = document.getElementById("imgModal");
+            const detailsModal = document.getElementById("detailsModal");
+            if(e.target === imgModal){ closeModal(); }
+            if(e.target === detailsModal){ closeDetailsModal(); }
+        });
+
+        // Optional: ESC key to close (UX only)
+        window.addEventListener("keydown", function(e){
+            if(e.key === "Escape"){
+                closeModal();
+                closeDetailsModal();
+            }
+        });
+    </script>
+</body>
+</html>

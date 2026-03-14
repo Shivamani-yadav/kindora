@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Matrimony Requests - KINDORA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Poppins',Arial,sans-serif;
+  color:#1c2430;
+  padding:20px;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(30,136,229,0.25), transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(46,125,50,0.25), transparent 40%),
+    linear-gradient(135deg, #eef5ff, #f6fff6);
+  background-attachment:fixed;
+  overflow-x:hidden;
+}
+
+.top-bar{
+  width:90%;
+  margin:0 auto 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.home-btn{
+  text-decoration:none;
+  background:#1E88E5;
+  color:#fff;
+  padding:10px 18px;
+  border-radius:10px;
+  font-weight:800;
+  box-shadow:0 8px 22px rgba(0,0,0,0.12);
+  transition:.25s;
+}
+.home-btn:hover{background:#1565C0;transform:translateY(-1px);}
+
+.title-wrap{
+  width:90%;
+  margin:0 auto 10px;
+  text-align:center;
+}
+h2{color:#1E88E5;font-weight:900;font-size:28px;margin-bottom:6px;}
+.subtitle{font-size:14px;color:#556;}
+
+table{
+  width:90%;
+  margin:0 auto 40px;
+  border-collapse:separate;
+  border-spacing:0;
+  background:rgba(255,255,255,0.86);
+  backdrop-filter: blur(10px);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,0.15);
+}
+th,td{
+  padding:14px 12px;
+  text-align:center;
+  font-size:14px;
+  border-bottom:1px solid #eef1f4;
+  vertical-align:middle;
+  word-break:break-word;
+}
+th{
+  background:#1E88E5;
+  color:#fff;
+  font-weight:800;
+  border-bottom:none;
+  font-size:13px;
+  letter-spacing:0.3px;
+  text-transform:uppercase;
+}
+tbody tr:nth-child(even){background:rgba(250,250,250,0.75);}
+tbody tr:hover{background:rgba(227,242,253,0.85);}
+
+.status-pending{color:#1E88E5;font-weight:900;}
+.status-approved{color:#2E7D32;font-weight:900;}
+.status-cancelled{color:#C62828;font-weight:900;}
+
+.btn{
+  padding:7px 12px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  color:#fff;
+  font-weight:800;
+  font-size:13px;
+  transition:.25s;
+  margin:2px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.12);
+}
+.approve{background:#43A047;}
+.approve:hover{background:#2E7D32;transform:translateY(-1px);}
+.cancel{background:#E53935;}
+.cancel:hover{background:#B71C1C;transform:translateY(-1px);}
+.details{background:#1565C0;}
+.details:hover{background:#0D47A1;transform:translateY(-1px);}
+
+.empty{padding:28px 12px;font-weight:800;color:#556;text-align:center;}
+
+/* ✅ Modal */
+.details-modal{
+  display:none;
+  position:fixed;
+  z-index:999;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.75);
+  overflow:auto;
+  padding:18px;
+}
+.details-content{
+  background:#fff;
+  margin:60px auto;
+  max-width:720px;
+  border-radius:16px;
+  padding:22px;
+  position:relative;
+  animation:fadeIn 0.25s ease;
+  box-shadow:0 16px 60px rgba(0,0,0,0.35);
+}
+.close{
+  position:absolute;
+  top:14px;
+  right:18px;
+  font-size:28px;
+  font-weight:900;
+  color:#555;
+  cursor:pointer;
+  transition:0.2s;
+}
+.close:hover{color:#000;}
+.modal-title{
+  font-size:22px;
+  font-weight:900;
+  color:#1E88E5;
+  margin-bottom:10px;
+  text-align:center;
+}
+.row{
+  display:flex;
+  gap:12px;
+  padding:10px 0;
+  border-bottom:1px dashed #e7e7e7;
+  align-items:flex-start;
+}
+.row:last-child{border-bottom:none;}
+.k{
+  width:190px;
+  font-weight:900;
+  color:#223;
+  flex-shrink:0;
+}
+.v{
+  flex:1;
+  color:#334;
+  white-space:pre-wrap;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(-10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+@media (max-width:768px){
+  .top-bar, .title-wrap, table {width:100%;}
+  th,td{padding:10px 8px;font-size:12px;}
+  .k{width:140px;}
+}
+.new-profile-btn{
+  text-decoration:none;
+  background:#43A047;
+  color:#fff;
+  padding:10px 18px;
+  border-radius:10px;
+  font-weight:800;
+  box-shadow:0 8px 22px rgba(0,0,0,0.12);
+  transition:.25s;
+}
+.new-profile-btn:hover{
+  background:#2E7D32;
+  transform:translateY(-1px);
+}
+</style>
+</head>
+
+<body>
+<div class="top-bar">
+  <a class="home-btn" href="/admin-dashboard">🏠 Home</a>
+   <a class="new-profile-btn" href="/add-matrimony-profile"> Add/Delete Profile</a>
+</div>
+
+<div class="title-wrap">
+  <h2>Matrimony Requests</h2>
+  <div class="subtitle">All partner selections submitted by users</div>
+</div>
+<!-- Approve All Button -->
+<div style="width:100%; margin:0 auto 12px; display:flex; justify-content:flex-end;">
+  <form method="POST" action="/matrimony-approve-all"
+        onsubmit="return confirm('Approve all pending matrimony requests?')">
+    <button type="submit" class="btn approve" style="padding:10px 18px;">
+      Approve All Pending
+    </button>
+  </form>
+</div>
+
+<table>
+<thead>
+<tr>
+  <th>Sl. No</th>
+  <th>User Name</th>
+  <th>User Email</th>
+  <th>User Gender</th>
+  <th>User Details</th>
+  <th>Profile Details</th>
+  <th>Status</th>
+  <th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+{% for r in requests_data %}
+<tr>
+  <td>{{ loop.index }}</td>
+  <td>{{ r[1] }}</td>
+  <td>{{ r[2] }}</td>
+  <td>{{ r[3] }}</td>
+
+  <td>
+    <button type="button" class="btn details" onclick="openUserModal({{ loop.index0 }})">View</button>
+  </td>
+
+  <td>
+    <button type="button" class="btn details" onclick="openProfileModal({{ loop.index0 }})">View</button>
+  </td>
+
+  <td>
+    {% if r[10] == 'Pending' %}
+      <span class="status-pending">{{ r[10] }}</span>
+    {% elif r[10] == 'Approved' %}
+      <span class="status-approved">{{ r[10] }}</span>
+    {% elif r[10] == 'Cancelled' %}
+      <span class="status-cancelled">{{ r[10] }}</span>
+    {% else %}
+      {{ r[10] }}
+    {% endif %}
+  </td>
+
+  <td>
+    {% if r[10] == 'Pending' %}
+      <form method="POST" action="/matrimony-action" style="display:inline-block;">
+        
+        <input type="hidden" name="request_id" value="{{ r[0] }}">
+        <button type="submit" name="action" value="Approved" class="btn approve">Approve</button>
+        <button type="submit" name="action" value="Cancelled" class="btn cancel">Cancel</button>
+      </form>
+    {% else %}
+      <span style="font-weight:800;color:#556;">Done</span>
+    {% endif %}
+  </td>
+</tr>
+{% else %}
+<tr>
+  <td class="empty" colspan="8">No matrimony requests found.</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<!-- ✅ Details Modal -->
+<div id="detailsModal" class="details-modal">
+  <div class="details-content">
+    <span class="close" onclick="closeDetailsModal()">&times;</span>
+    <div class="modal-title" id="modalTitle">Details</div>
+    <div id="detailsContent"></div>
+  </div>
+</div>
+
+<script>
+  // Use tojson so quotes/newlines won't break JS
+  const reqData = [
+    {% for r in requests_data %}
+    {
+      id: {{ r[0]|tojson }},
+      user_name: {{ r[1]|tojson }},
+      user_email: {{ r[2]|tojson }},
+      user_gender: {{ r[3]|tojson }},
+      profile_name: {{ r[4]|tojson }},
+      profile_age: {{ r[5]|tojson }},
+      profile_gender: {{ r[6]|tojson }},
+      profile_occupation: {{ r[7]|tojson }},
+      profile_address: {{ r[8]|tojson }},
+      profile_image: {{ r[9]|tojson }},
+      status: {{ r[10]|tojson }}
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ];
+
+  function openUserModal(index){
+    const d = reqData[index];
+    document.getElementById("modalTitle").innerText = "User Details";
+    document.getElementById("detailsContent").innerHTML = `
+      <div class="row"><div class="k">Request ID</div><div class="v">${escapeHtml(d.id)}</div></div>
+      <div class="row"><div class="k">User Name</div><div class="v">${escapeHtml(d.user_name)}</div></div>
+      <div class="row"><div class="k">User Email</div><div class="v">${escapeHtml(d.user_email)}</div></div>
+      <div class="row"><div class="k">User Gender</div><div class="v">${escapeHtml(d.user_gender)}</div></div>
+      <div class="row"><div class="k">Status</div><div class="v">${escapeHtml(d.status)}</div></div>
+    `;
+    document.getElementById("detailsModal").style.display = "block";
+  }
+
+  function openProfileModal(index){
+    const d = reqData[index];
+    document.getElementById("modalTitle").innerText = "Profile Details";
+
+    const imgBlock = d.profile_image ? `
+      <div style="text-align:center;margin-bottom:15px;">
+        <img src="${escapeHtml(d.profile_image)}"
+             style="width:150px;height:150px;border-radius:50%;object-fit:cover;border:4px solid #1E88E5;">
+      </div>
+    ` : "";
+
+    document.getElementById("detailsContent").innerHTML = `
+      ${imgBlock}
+      <div class="row"><div class="k">Selected Profile</div><div class="v">${escapeHtml(d.profile_name)}</div></div>
+      <div class="row"><div class="k">Age</div><div class="v">${escapeHtml(d.profile_age)}</div></div>
+      <div class="row"><div class="k">Gender</div><div class="v">${escapeHtml(d.profile_gender)}</div></div>
+      <div class="row"><div class="k">Occupation</div><div class="v">${escapeHtml(d.profile_occupation)}</div></div>
+      <div class="row"><div class="k">Address</div><div class="v">${escapeHtml(d.profile_address)}</div></div>
+    `;
+    document.getElementById("detailsModal").style.display = "block";
+  }
+
+  function closeDetailsModal(){
+    document.getElementById("detailsModal").style.display = "none";
+  }
+
+  window.addEventListener("click", function(e){
+    const modal = document.getElementById("detailsModal");
+    if (e.target === modal) closeDetailsModal();
+  });
+
+  function escapeHtml(str){
+    return String(str ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+</script>
+
+</body>
+</html>
