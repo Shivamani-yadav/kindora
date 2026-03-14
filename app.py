@@ -14,52 +14,34 @@ razorpay_client = razorpay.Client(auth=("YOUR_KEY_ID", "YOUR_KEY_SECRET"))
 # ================= EMAIL CONFIG (SET YOURS) =================
 SMTP_EMAIL = "nekuavasarama21@gmail.com"
 SMTP_APP_PASSWORD = "clpnowhuqqjmhsdf"
-SMTP_SERVER = "smtp.gmail.com" 
-SMTP_PORT_SSL = 465
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 587
 def send_email(to_email: str, subject: str, body_text: str, body_html: str = None):
-    """
-    Sends email via Gmail SMTP SSL.
-    If body_html is provided, it sends HTML; otherwise, sends plain text.
-    """
-    msg = EmailMessage()
-    if body_html:
-        msg.add_alternative(body_html, subtype="html")
-    else:
-        msg.set_content(body_text)
+    try:
+        msg = EmailMessage()
+        msg["Subject"] = subject
+        msg["From"] = SMTP_EMAIL
+        msg["To"] = to_email
 
-    msg["Subject"] = subject
-    msg["From"] = SMTP_EMAIL
-    msg["To"] = to_email
+        if body_html:
+            msg.set_content(body_text if body_text else "HTML email")
+            msg.add_alternative(body_html, subtype="html")
+        else:
+            msg.set_content(body_text)
 
-    server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL)
-    server.login(SMTP_EMAIL, SMTP_APP_PASSWORD)
-    server.send_message(msg)
-    server.quit()
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=10) as server:
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            server.login(SMTP_EMAIL, SMTP_APP_PASSWORD)
+            server.send_message(msg)
 
+        print(f"Email sent to {to_email}")
+        return True
 
-def safe_str(x):
-    return "" if x is None else str(x)
-
-
-def parse_food_details(message: str):
-    """
-    Your food message format in DB is like:
-    "FoodName | Occasion: ... | Note: ... | Extras: ... | Date: YYYY-MM-DD"
-    We extract:
-      - item_name = FoodName
-      - date = after "Date:"
-    """
-    msg = safe_str(message)
-    item_name = msg.split("|")[0].strip() if msg else "-"
-    date_val = "-"
-    if "Date:" in msg:
-        try:
-            date_val = msg.split("Date:")[1].strip()
-        except:
-            date_val = "-"
-    return item_name or "-", date_val or "-"
-
-
+    except Exception as e:
+        print("EMAIL ERROR:", repr(e))
+        return False
 def parse_book_name(message: str):
     """
     Your book message format in DB is like:
@@ -526,7 +508,8 @@ Your child submission '{child_name}' has been Approved by KINDORA team.
 
 Thank you!
 """
-            send_email(user_email, subject, body)
+            ok = send_email(user_email, subject, body)
+            print("mail status:", ok)
         except Exception as e:
             print(f"Approve-all email failed for child ID {child_id}:", e)
 
