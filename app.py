@@ -17,30 +17,30 @@ SMTP_APP_PASSWORD = "clpnowhuqqjmhsdf"
 SMTP_SERVER = "smtp.gmail.com" 
 SMTP_PORT_SSL = 465
 def send_email(to_email: str, subject: str, body_text: str, body_html: str = None):
-    try:
-        msg = EmailMessage()
+    """
+    Sends email via Gmail SMTP SSL.
+    If body_html is provided, it sends HTML; otherwise, sends plain text.
+    """
+    msg = EmailMessage()
+    if body_html:
+        msg.add_alternative(body_html, subtype="html")
+    else:
+        msg.set_content(body_text)
 
-        if body_html:
-            msg.set_content(body_text if body_text else "HTML email")
-            msg.add_alternative(body_html, subtype="html")
-        else:
-            msg.set_content(body_text)
+    msg["Subject"] = subject
+    msg["From"] = SMTP_EMAIL
+    msg["To"] = to_email
 
-        msg["Subject"] = subject
-        msg["From"] = SMTP_EMAIL
-        msg["To"] = to_email
+    server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL)
+    server.login(SMTP_EMAIL, SMTP_APP_PASSWORD)
+    server.send_message(msg)
+    server.quit()
 
-        server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL, timeout=10)
-        server.login(SMTP_EMAIL, SMTP_APP_PASSWORD)
-        server.send_message(msg)
-        server.quit()
 
-        print("Email sent successfully")
-        return True
+def safe_str(x):
+    return "" if x is None else str(x)
 
-    except Exception as e:
-        print("EMAIL ERROR:", e)
-        return False
+
 def parse_food_details(message: str):
     """
     Your food message format in DB is like:
@@ -215,6 +215,7 @@ admin_names = {
     "t2": "Bhavana",
     "21": "Akshay"
 }
+
 
 # ----------------- Routes -----------------
 
