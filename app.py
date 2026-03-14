@@ -13,32 +13,32 @@ razorpay_client = razorpay.Client(auth=("YOUR_KEY_ID", "YOUR_KEY_SECRET"))
 
 # ================= EMAIL CONFIG (SET YOURS) =================
 SMTP_EMAIL = "nekuavasarama21@gmail.com"
-SMTP_APP_PASSWORD = "clpnowhuqqjm hsdf"
+SMTP_APP_PASSWORD = "clpnowhuqqjmhsdf"
 SMTP_SERVER = "smtp.gmail.com" 
 SMTP_PORT_SSL = 465
 
-
 def send_email(to_email: str, subject: str, body_text: str, body_html: str = None):
-    """
-    Sends email via Gmail SMTP SSL.
-    If body_html is provided, it sends HTML; otherwise, sends plain text.
-    """
-    msg = EmailMessage()
-    if body_html:
-        msg.add_alternative(body_html, subtype="html")
-    else:
-        msg.set_content(body_text)
+    try:
+        msg = EmailMessage()
 
-    msg["Subject"] = subject
-    msg["From"] = SMTP_EMAIL
-    msg["To"] = to_email
+        if body_html:
+            msg.add_alternative(body_html, subtype="html")
+        else:
+            msg.set_content(body_text)
 
-    server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL)
-    server.login(SMTP_EMAIL, SMTP_APP_PASSWORD)
-    server.send_message(msg)
-    server.quit()
+        msg["Subject"] = subject
+        msg["From"] = SMTP_EMAIL
+        msg["To"] = to_email
 
+        server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL)
+        server.login(SMTP_EMAIL, SMTP_APP_PASSWORD)
+        server.send_message(msg)
+        server.quit()
 
+        print("Email sent successfully")
+
+    except Exception as e:
+        print("EMAIL ERROR:", e)
 def safe_str(x):
     return "" if x is None else str(x)
 
