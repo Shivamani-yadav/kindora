@@ -548,19 +548,23 @@ def register_a_child():
     child_id = None
 
     if request.method == "POST":
-        user_name = session["user_name"]
-        user_email = session["user_email"]
+        user_name = session.get("user_name", "")
+        user_email = session.get("user_email", "")
         police_station_id = request.form.get("police_station_id", "")
-        phone = request.form["phone"]
+        phone = request.form.get("phone", "")
         address = request.form.get("police_station_name", "")
         child_name = request.form.get("child_name", "")
-        child_address = request.form.get("child_found_address", "")  
-        child_photo = request.files["child_photo"]
+        child_address = request.form.get("child_found_address", "")
+        child_photo = request.files.get("child_photo")
+
         upload_folder = os.path.join(BASE_DIR, "static/uploads")
         os.makedirs(upload_folder, exist_ok=True)
-        photo_filename = child_photo.filename
-        child_photo.save(os.path.join(upload_folder, photo_filename))
-        photo_path = photo_filename
+
+        photo_path = ""
+        if child_photo and child_photo.filename:
+            photo_filename = secure_filename(child_photo.filename)
+            child_photo.save(os.path.join(upload_folder, photo_filename))
+            photo_path = photo_filename
 
         child_id = f"KID{random.randint(1000,9999)}"
 
@@ -568,39 +572,47 @@ def register_a_child():
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
             cursor.execute('''
-                INSERT INTO children (user_email, user_name, phone, address, child_name, child_address, child_photo, police_station_id, status)
+                INSERT INTO children (
+                    user_email, user_name, phone, address,
+                    child_name, child_address, child_photo,
+                    police_station_id, status
+                )
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
-                user_email, user_name, phone, address, child_name, child_address, photo_path, police_station_id, 'Pending'
+                user_email, user_name, phone, address,
+                child_name, child_address, photo_path,
+                police_station_id, 'Pending'
             ))
             conn.commit()
             conn.close()
         except Exception as e:
             print("Database insertion failed:", e)
 
-        confirmation = f"Donation submitted! Child: {child_name}, Found at: {child_address}\nA confirmation email has been sent to your registered email."
+        confirmation = f"Child registration submitted! Child: {child_name}, Found at: {child_address}"
 
         try:
-            subject = "KINDORA Donation Confirmation"
+            subject = "KINDORA Child Registration Confirmation"
             body = f"""Hey {user_name},
-Your donation has been submitted successfully!
+
+Your child registration has been submitted successfully!
 Your registered phone number is {phone}
 Your Child ID is: {child_id}
+
 Thanks for visiting our Kindora page!
 """
-            send_email(user_email, subject, body)
-            email_sent = True
+            if user_email:
+                send_email(user_email, subject, body)
+                email_sent = True
         except Exception as e:
             print("Email sending failed:", e)
 
     return render_template(
         "register_a_child.html",
-        user_name=session["user_name"],
+        user_name=session.get("user_name", ""),
         confirmation=confirmation,
         email_sent=email_sent,
         child_id=child_id
     )
-
 
 @app.route("/child-delete", methods=["POST"])
 def child_delete():
