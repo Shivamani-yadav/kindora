@@ -538,7 +538,7 @@ def admin_logout():
     return redirect("/admin-login")
 
 
-@app.route("/register a child", methods=["GET", "POST"])
+@app.route("/register-child", methods=["GET", "POST"])
 def register_a_child():
     if "user_name" not in session:
         return redirect("/login")
@@ -594,7 +594,7 @@ Thanks for visiting our Kindora page!
             print("Email sending failed:", e)
 
     return render_template(
-        "register a child.html",
+        "register_a_child.html",
         user_name=session["user_name"],
         confirmation=confirmation,
         email_sent=email_sent,
