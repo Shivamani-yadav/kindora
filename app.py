@@ -16,12 +16,12 @@ SMTP_EMAIL = "nekuavasarama21@gmail.com"
 SMTP_APP_PASSWORD = "clpnowhuqqjmhsdf"
 SMTP_SERVER = "smtp.gmail.com" 
 SMTP_PORT_SSL = 465
-
 def send_email(to_email: str, subject: str, body_text: str, body_html: str = None):
     try:
         msg = EmailMessage()
 
         if body_html:
+            msg.set_content(body_text if body_text else "This email contains HTML content.")
             msg.add_alternative(body_html, subtype="html")
         else:
             msg.set_content(body_text)
@@ -30,7 +30,7 @@ def send_email(to_email: str, subject: str, body_text: str, body_html: str = Non
         msg["From"] = SMTP_EMAIL
         msg["To"] = to_email
 
-        server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL)
+        server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL, timeout=10)
         server.login(SMTP_EMAIL, SMTP_APP_PASSWORD)
         server.send_message(msg)
         server.quit()
@@ -39,9 +39,9 @@ def send_email(to_email: str, subject: str, body_text: str, body_html: str = Non
 
     except Exception as e:
         print("EMAIL ERROR:", e)
-def safe_str(x):
-    return "" if x is None else str(x)
+        return False
 
+    return True
 
 def parse_food_details(message: str):
     """
