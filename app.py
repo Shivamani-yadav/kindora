@@ -34,6 +34,8 @@ def send_email(to_email: str, subject: str, body_text: str, body_html: str = Non
         server.login(SMTP_EMAIL, SMTP_APP_PASSWORD)
         server.send_message(msg)
         server.quit()
+
+        print("Email sent successfully")
         return True
 
     except Exception as e:
@@ -480,7 +482,8 @@ def child_action():
         try:
             subject = f"KINDORA Child Submission {action.capitalize()}"
             body = f"Hello,\n\nYour child '{child_name}' has been {action.capitalize()} by KINDORA team.\n\nThank you!"
-            send_email(user_email, subject, body)
+            email_sent = send_email(user_email, subject, body)
+            print("email_sent =", email_sent)
         except Exception as e:
             print("Email sending failed:", e)
 
