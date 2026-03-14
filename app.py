@@ -540,7 +540,74 @@ def admin_logout():
 
 @app.route("/register-child", methods=["GET", "POST"])
 def register_a_child():
-    return "<h1>register-child route working</h1>"
+    if "user_name" not in session:
+        return redirect("/login")
+
+    confirmation = None
+    email_sent = False
+    child_id = None
+
+    if request.method == "POST":
+        user_name = session.get("user_name", "")
+        user_email = session.get("user_email", "")
+        police_station_id = request.form.get("police_station_id", "")
+        phone = request.form.get("phone", "")
+        address = request.form.get("police_station_name", "")
+        child_name = request.form.get("child_name", "")
+        child_address = request.form.get("child_found_address", "")
+        child_photo = request.files.get("child_photo")
+
+        upload_folder = os.path.join(BASE_DIR, "static/uploads")
+        os.makedirs(upload_folder, exist_ok=True)
+
+        photo_path = ""
+        if child_photo and child_photo.filename:
+            photo_filename = secure_filename(child_photo.filename)
+            child_photo.save(os.path.join(upload_folder, photo_filename))
+            photo_path = photo_filename
+
+        child_id = f"KID{random.randint(1000,9999)}"
+
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO children (
+                    user_email, user_name, phone, address,
+                    child_name, child_address, child_photo,
+                    police_station_id, status
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                user_email, user_name, phone, address,
+                child_name, child_address, photo_path,
+                police_station_id, "Pending"
+            ))
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            print("Database insertion failed:", e)
+
+        try:
+            if user_email:
+                send_email(
+                    user_email,
+                    "KINDORA Child Registration Confirmation",
+                    f"Hey {user_name}, your child registration was submitted successfully."
+                )
+                email_sent = True
+        except Exception as e:
+            print("Email sending failed:", e)
+
+        confirmation = f"Child registration submitted! Child: {child_name}, Found at: {child_address}"
+
+    return render_template(
+        "register_a_child.html",
+        user_name=session.get("user_name", ""),
+        confirmation=confirmation,
+        email_sent=email_sent,
+        child_id=child_id
+    )
 @app.route("/child-delete", methods=["POST"])
 def child_delete():
     if "admin_email" not in session:
