@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from email.message import EmailMessage
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"
+app.secret_key = "kindora_secret_key"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "database.db")
@@ -557,7 +557,7 @@ def register_a_child():
         child_address = request.form.get("child_found_address", "")
         child_photo = request.files.get("child_photo")
 
-        upload_folder = os.path.join(BASE_DIR, "static/uploads")
+        upload_folder = os.path.join(BASE_DIR, "static", "uploads")
         os.makedirs(upload_folder, exist_ok=True)
 
         photo_path = ""
