@@ -21,7 +21,7 @@ def send_email(to_email: str, subject: str, body_text: str, body_html: str = Non
         msg = EmailMessage()
 
         if body_html:
-            msg.set_content(body_text if body_text else "This email contains HTML content.")
+            msg.set_content(body_text if body_text else "HTML email")
             msg.add_alternative(body_html, subtype="html")
         else:
             msg.set_content(body_text)
@@ -34,15 +34,11 @@ def send_email(to_email: str, subject: str, body_text: str, body_html: str = Non
         server.login(SMTP_EMAIL, SMTP_APP_PASSWORD)
         server.send_message(msg)
         server.quit()
-
-        print("Email sent successfully")
+        return True
 
     except Exception as e:
         print("EMAIL ERROR:", e)
         return False
-
-    return True
-
 def parse_food_details(message: str):
     """
     Your food message format in DB is like:
