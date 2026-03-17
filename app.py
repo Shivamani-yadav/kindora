@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect, session, jsonify
-import sqlite3, os, random, smtplib
+import sqlite3, os, random
 import razorpay
+import requests
 from werkzeug.utils import secure_filename
-from email.message import EmailMessage
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -11,38 +11,61 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "database.db")
 razorpay_client = razorpay.Client(auth=("YOUR_KEY_ID", "YOUR_KEY_SECRET"))
 
-# ================= EMAIL CONFIG (SET YOURS) =================
-SMTP_EMAIL = "nekuavasarama21@gmail.com"
-SMTP_APP_PASSWORD = "clpnowhuqqjmhsdf"
-SMTP_SERVER = "smtp.gmail.com" 
-SMTP_PORT_SSL = 465
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
+SENDER_EMAIL = "nekuavasarama21@gmail.com"
+SENDER_NAME = "Kindora"
 
-
-def send_email(to_email: str, subject: str, body_text: str, body_html: str = None):
-    """
-    Sends email via Gmail SMTP SSL.
-    If body_html is provided, it sends HTML; otherwise, sends plain text.
-    """
-    msg = EmailMessage()
-    if body_html:
-        msg.add_alternative(body_html, subtype="html")
-    else:
-        msg.set_content(body_text)
-
-    msg["Subject"] = subject
-    msg["From"] = SMTP_EMAIL
-    msg["To"] = to_email
-
-    server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL)
-    server.login(SMTP_EMAIL, SMTP_APP_PASSWORD)
-    server.send_message(msg)
-    server.quit()
-
-
+# ✅ ADD HERE
 def safe_str(x):
     return "" if x is None else str(x)
 
 
+def send_email(to_email: str, subject: str, body_text: str, body_html: str = None):
+    if not BREVO_API_KEY:
+        raise Exception("BREVO_API_KEY is missing")
+
+    url = "https://api.brevo.com/v3/smtp/email"
+
+    headers = {
+        "accept": "application/json",
+        "api-key": BREVO_API_KEY,
+        "content-type": "application/json"
+    }
+
+    data = {
+        "sender": {
+            "name": SENDER_NAME,
+            "email": SENDER_EMAIL
+        },
+        "to": [{"email": to_email}],
+        "subject": subject,
+        "textContent": body_text if body_text else "This email contains HTML content."
+    }
+
+    if body_html:
+        data["htmlContent"] = body_html
+
+    response = requests.post(url, json=data, headers=headers)
+    print("Status code:", response.status_code)
+    print("Response:", response.text)
+
+    if response.status_code not in [200, 201]:
+        raise Exception(f"Brevo error: {response.text}")
+
+    print("Email sent successfully")
+
+
+@app.route("/test-email")
+def test_email():
+    try:
+        send_email(
+            "shivamanigoddati@gmail.com",
+            "Test Email from Kindora",
+            "Hello bro, Brevo working"
+        )
+        return "Email sent successfully"
+    except Exception as e:
+        return f"Failed: {e}"
 def parse_food_details(message: str):
     """
     Your food message format in DB is like:
