@@ -13,7 +13,7 @@ razorpay_client = razorpay.Client(auth=("YOUR_KEY_ID", "YOUR_KEY_SECRET"))
 
 # ================= EMAIL CONFIG (SET YOURS) =================
 SMTP_EMAIL = "nekuavasarama21@gmail.com"
-SMTP_APP_PASSWORD = "clpnowhuqqjm hsdf"
+SMTP_APP_PASSWORD = "clpnowhuqqjmhsdf"
 SMTP_SERVER = "smtp.gmail.com" 
 SMTP_PORT_SSL = 465
 
