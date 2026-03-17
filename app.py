@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from email.message import EmailMessage
 
 app = Flask(__name__)
-app.secret_key = "kindora_secret_key"
+app.secret_key = "your_secret_key"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "database.db")
@@ -13,35 +13,55 @@ razorpay_client = razorpay.Client(auth=("YOUR_KEY_ID", "YOUR_KEY_SECRET"))
 
 # ================= EMAIL CONFIG (SET YOURS) =================
 SMTP_EMAIL = "nekuavasarama21@gmail.com"
-SMTP_APP_PASSWORD = "clpnowhuqqjmhsdf"
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
+SMTP_APP_PASSWORD = "clpnowhuqqjm hsdf"
+SMTP_SERVER = "smtp.gmail.com" 
+SMTP_PORT_SSL = 465
+
+
 def send_email(to_email: str, subject: str, body_text: str, body_html: str = None):
-    try:
-        msg = EmailMessage()
-        msg["Subject"] = subject
-        msg["From"] = SMTP_EMAIL
-        msg["To"] = to_email
+    """
+    Sends email via Gmail SMTP SSL.
+    If body_html is provided, it sends HTML; otherwise, sends plain text.
+    """
+    msg = EmailMessage()
+    if body_html:
+        msg.add_alternative(body_html, subtype="html")
+    else:
+        msg.set_content(body_text)
 
-        if body_html:
-            msg.set_content(body_text if body_text else "HTML email")
-            msg.add_alternative(body_html, subtype="html")
-        else:
-            msg.set_content(body_text)
+    msg["Subject"] = subject
+    msg["From"] = SMTP_EMAIL
+    msg["To"] = to_email
 
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=10) as server:
-            server.ehlo()
-            server.starttls()
-            server.ehlo()
-            server.login(SMTP_EMAIL, SMTP_APP_PASSWORD)
-            server.send_message(msg)
+    server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL)
+    server.login(SMTP_EMAIL, SMTP_APP_PASSWORD)
+    server.send_message(msg)
+    server.quit()
 
-        print(f"Email sent to {to_email}")
-        return True
 
-    except Exception as e:
-        print("EMAIL ERROR:", repr(e))
-        return False
+def safe_str(x):
+    return "" if x is None else str(x)
+
+
+def parse_food_details(message: str):
+    """
+    Your food message format in DB is like:
+    "FoodName | Occasion: ... | Note: ... | Extras: ... | Date: YYYY-MM-DD"
+    We extract:
+      - item_name = FoodName
+      - date = after "Date:"
+    """
+    msg = safe_str(message)
+    item_name = msg.split("|")[0].strip() if msg else "-"
+    date_val = "-"
+    if "Date:" in msg:
+        try:
+            date_val = msg.split("Date:")[1].strip()
+        except:
+            date_val = "-"
+    return item_name or "-", date_val or "-"
+
+
 def parse_book_name(message: str):
     """
     Your book message format in DB is like:
@@ -197,7 +217,6 @@ admin_names = {
     "t2": "Bhavana",
     "21": "Akshay"
 }
-
 
 # ----------------- Routes -----------------
 
@@ -465,8 +484,7 @@ def child_action():
         try:
             subject = f"KINDORA Child Submission {action.capitalize()}"
             body = f"Hello,\n\nYour child '{child_name}' has been {action.capitalize()} by KINDORA team.\n\nThank you!"
-            email_sent = send_email(user_email, subject, body)
-            print("email_sent =", email_sent)
+            send_email(user_email, subject, body)
         except Exception as e:
             print("Email sending failed:", e)
 
@@ -508,8 +526,7 @@ Your child submission '{child_name}' has been Approved by KINDORA team.
 
 Thank you!
 """
-            ok = send_email(user_email, subject, body)
-            print("mail status:", ok)
+            send_email(user_email, subject, body)
         except Exception as e:
             print(f"Approve-all email failed for child ID {child_id}:", e)
 
@@ -521,7 +538,7 @@ def admin_logout():
     return redirect("/admin-login")
 
 
-@app.route("/register-child", methods=["GET", "POST"])
+@app.route("/register-a-child", methods=["GET", "POST"])
 def register_a_child():
     if "user_name" not in session:
         return redirect("/login")
@@ -531,66 +548,59 @@ def register_a_child():
     child_id = None
 
     if request.method == "POST":
-        user_name = session.get("user_name", "")
-        user_email = session.get("user_email", "")
+        user_name = session["user_name"]
+        user_email = session["user_email"]
         police_station_id = request.form.get("police_station_id", "")
-        phone = request.form.get("phone", "")
+        phone = request.form["phone"]
         address = request.form.get("police_station_name", "")
         child_name = request.form.get("child_name", "")
-        child_address = request.form.get("child_found_address", "")
-        child_photo = request.files.get("child_photo")
-
-        upload_folder = os.path.join(BASE_DIR, "static", "uploads")
+        child_address = request.form.get("child_found_address", "")  
+        child_photo = request.files["child_photo"]
+        upload_folder = os.path.join(BASE_DIR, "static/uploads")
         os.makedirs(upload_folder, exist_ok=True)
-
-        photo_path = ""
-        if child_photo and child_photo.filename:
-            photo_filename = secure_filename(child_photo.filename)
-            child_photo.save(os.path.join(upload_folder, photo_filename))
-            photo_path = photo_filename
+        photo_filename = child_photo.filename
+        child_photo.save(os.path.join(upload_folder, photo_filename))
+        photo_path = photo_filename
 
         child_id = f"KID{random.randint(1000,9999)}"
 
         try:
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
-            cursor.execute("""
-                INSERT INTO children (
-                    user_email, user_name, phone, address,
-                    child_name, child_address, child_photo,
-                    police_station_id, status
-                )
+            cursor.execute('''
+                INSERT INTO children (user_email, user_name, phone, address, child_name, child_address, child_photo, police_station_id, status)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                user_email, user_name, phone, address,
-                child_name, child_address, photo_path,
-                police_station_id, "Pending"
+            ''', (
+                user_email, user_name, phone, address, child_name, child_address, photo_path, police_station_id, 'Pending'
             ))
             conn.commit()
             conn.close()
         except Exception as e:
             print("Database insertion failed:", e)
 
+        confirmation = f"Donation submitted! Child: {child_name}, Found at: {child_address}\nA confirmation email has been sent to your registered email."
+
         try:
-            if user_email:
-                send_email(
-                    user_email,
-                    "KINDORA Child Registration Confirmation",
-                    f"Hey {user_name}, your child registration was submitted successfully."
-                )
-                email_sent = True
+            subject = "KINDORA Donation Confirmation"
+            body = f"""Hey {user_name},
+Your donation has been submitted successfully!
+Your registered phone number is {phone}
+Your Child ID is: {child_id}
+Thanks for visiting our Kindora page!
+"""
+            send_email(user_email, subject, body)
+            email_sent = True
         except Exception as e:
             print("Email sending failed:", e)
 
-        confirmation = f"Child registration submitted! Child: {child_name}, Found at: {child_address}"
-
     return render_template(
         "register_a_child.html",
-        user_name=session.get("user_name", ""),
+        user_name=session["user_name"],
         confirmation=confirmation,
         email_sent=email_sent,
         child_id=child_id
     )
+
 @app.route("/child-delete", methods=["POST"])
 def child_delete():
     if "admin_email" not in session:
